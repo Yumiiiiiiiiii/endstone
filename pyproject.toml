@@ -92,7 +92,7 @@ test-command = "pytest {package}/tests --ignore={package}/tests/plugin"
 test-requires = "pytest"
 repair-wheel-command = [
     "pip install uv",
-    'uv run --script scripts/repair_wheel.py -o endstone -p endstone -w {dest_dir} {wheel}',
+    'uv run --no-project --script {package}/scripts/repair_wheel.py -o endstone -p endstone -w {dest_dir} {wheel}',
 ]
 
 [tool.cibuildwheel.linux]

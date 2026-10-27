@@ -378,6 +378,8 @@ def main():
         elif 'InventoryTransaction23executeWorldInteraction' in name:
             fragment = 'ZNK20InventoryTransaction18getExecuteFunctionERK15InventorySourceE3$_5'
             use_slots = True
+        elif 'CommandRegistry24registerOverloadInternal' in name:
+            fragment = 'PFPN15CommandRegistry10ParseTokenERS3_NS2_6SymbolE'
         if fragment:
             for typename in new.type_names_containing(fragment):
                 for table in new.tables_for_encoded(typename.encode() + b'\0'):

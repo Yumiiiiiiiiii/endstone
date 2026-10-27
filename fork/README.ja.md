@@ -32,6 +32,15 @@ ServerNetworkHandlerのslot35/63/101/102などが候補だが、同じ実装を�
 関数解析ではlibc++ functorのRTTI型名変更とNetherNetの副vtable／this調整thunkも追跡する。
 間接callの`[vptr+offset]`はABIの証拠なので、命令比較でアドレスとして消さずに保持する。
 
+CommandRegistryの旧registerOverloadInternalパターンは26.60でItemStackRequestと
+DimensionDataLoaderの別関数に一致する。ParseToken関数ポインタのRTTIを使う追加解析では
+`0xa0e2cb0`を候補として抽出する。旧版の一部`this+0x140/0x170/0x278`参照に対し、
+候補では`+0x148/0x178/0x280`を参照する。関数アドレスの変更だけでコマンド登録が
+動作するとは扱わず、内部フィールド・enum表・実コマンド登録の確認を引き続き必要とする。
+
+Wheel repairは`{package}`内のスクリプトを`uv --no-project`で実行する。
+privateリポジトリの下へForkをcheckoutした場合も、親のpyproject依存を読み込まない。
+
 ## ブランチ
 
 `main` は公式 main の追跡用、`dev` は公式更新と独自変更の統合先、
