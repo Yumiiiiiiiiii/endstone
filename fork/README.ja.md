@@ -40,6 +40,16 @@ DimensionDataLoaderの別関数に一致する。ParseToken関数ポインタの
 cameraコマンド登録の呼び出し元からも同じ候補への直接callを確認した。
 呼び出し元の解析では、共通RTTIが大量の別関数を候補に加える場合を除き、固有の説明文字列などを優先する。
 
+`exercise_location_candidate.py`はLinux x86-64の確認済みBDSアーカイブだけを受け付け、
+`PlayerLocationSender::_shouldSendPositionPacket`候補を別プロセスで単独実行する。
+初期化やフックを読み込まず、参照する定数と関数だけを保護付きメモリへ配置する。
+外部呼出しは確認したatan2f/fmodfだけをhost libmへ接続する。network namespaceとtimeoutを併用する。
+旧版`0xc80f880`と26.60候補`0xcdefbc0`を20,000入力で比較し、bool結果の不一致0、
+引数メモリ変更0、両math経路の呼出しを確認した。Vec3=12、optional<Vec3>=16、
+PlayerLocationData=24とdimension/is_spectatorのoffset16/20の組み合わせを使った結果であり、
+クラス全体の配置、呼出し元、フック、Endstone起動や実プレイヤーの合格には数えない。
+署名probeのfailureやstable gateを成功へ変えない。結果はdiagnostics artifactへ保存する。
+
 Wheel repairは`{package}`内のスクリプトを`uv --no-project`で実行する。
 privateリポジトリの下へForkをcheckoutした場合も、親のpyproject依存を読み込まない。
 

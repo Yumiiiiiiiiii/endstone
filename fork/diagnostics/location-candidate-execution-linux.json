@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "function": "PlayerLocationSender::_shouldSendPositionPacket",
+  "baseline_archive_sha256": "f6348d84fa714d04ca194f207e89453ca6bba0a1359396475271a52a150471c6",
+  "target_archive_sha256": "cbbd5414fa6a310353ed1fc76a0ba691c3fd1ea852fd04bb76764ee4c1afdb98",
+  "baseline_binary_sha256": "0a490c711d4a2ce075debcd979e8862b7eaba008373f9970f0edbb67f98f9207",
+  "target_binary_sha256": "ea16b541a448e07c337848d2c5f37321b706554b5216dd942f3f11e7a8ed2bad",
+  "baseline_address": "0xc80f880",
+  "target_address": "0xcdefbc0",
+  "argument_layout": {
+    "Vec3": 12,
+    "optional_Vec3": 16,
+    "PlayerLocationData": 24,
+    "dimension_offset": 16,
+    "spectator_offset": 20
+  },
+  "counts": {
+    "cases": 20000,
+    "true": 1185,
+    "false": 18815
+  },
+  "math_calls": {
+    "baseline": {
+      "atan2f": 1189,
+      "fmodf": 1189
+    },
+    "target": {
+      "atan2f": 1189,
+      "fmodf": 1189
+    }
+  },
+  "mismatches": [],
+  "mismatch_count": 0,
+  "status": "passed",
+  "native_abi_verified": false,
+  "endstone_runtime_verified": false,
+  "stable_eligible": false,
+  "limitations": [
+    "Isolated function calls only",
+    "Host libm replaces two BDS PLT math calls",
+    "No hook installation, server initialization, player or integration validation"
+  ],
+  "layout_scope": "Synthetic argument buffers; target sizeof and complete class layout are not proven"
+}

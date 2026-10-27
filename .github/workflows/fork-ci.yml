@@ -120,6 +120,21 @@ jobs:
                           '--target-version',config['requested_bds'],
                           '--output','reports/vtable-alignment-linux.json'],check=True)
           PY
+      - name: Exercise reviewed Linux position candidate in an isolated process
+        if: ${{ !cancelled() }}
+        run: |
+          python - <<'PY'
+          import json,subprocess,sys
+          from pathlib import Path
+          cache=Path('.cache/fork-bds/linux')
+          old=json.loads(Path('reports/baseline-linux.json').read_text())
+          new=json.loads(Path('reports/bds-1.26.60.json').read_text())
+          subprocess.run(['sudo','timeout','90','unshare','--net',sys.executable,
+                          'fork/exercise_location_candidate.py',
+                          '--baseline',str(cache/old['archive_filename']),
+                          '--target',str(cache/new['archive_filename']),
+                          '--output','reports/location-candidate-execution.json'],check=True)
+          PY
       - uses: actions/upload-artifact@v7
         if: always()
         with:

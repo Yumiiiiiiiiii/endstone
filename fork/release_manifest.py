@@ -53,6 +53,7 @@ def assemble(wheel: Path, evidence_path: Path, tag: str, commit: str, bds: dict)
             "wheel": {"filename": wheel.name, "sha256": wheel_sha,
                       "url": f"https://github.com/{repo}/releases/download/{tag}/{wheel.name}"},
             "bds": bds, "plugins": evidence.get("plugins", []),
+            **({"relay": evidence["relay"]} if evidence.get("relay") else {}),
             "runtime": {"repository": "Yumiiiiiiiiii/pterodactyl", "commit": evidence["runtime_commit"],
                         "image_digest": evidence["docker_image_digest"],
                         "installer_digest": evidence["installer_image_digest"]},
