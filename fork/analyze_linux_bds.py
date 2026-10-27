@@ -177,7 +177,9 @@ class Binary:
                 if index == 1200:
                     break
                 operands = instruction.op_str
-                if instruction.mnemonic.startswith(('j', 'call')):
+                # Keep indirect-call displacements: [vptr+0xNN] is an ABI slot,
+                # not a link-time address that may be normalized away.
+                if instruction.mnemonic.startswith(('j', 'call')) and operands.startswith('0x'):
                     operands = re.sub(r'0x[0-9a-f]+', '<target>', operands)
                 operands = re.sub(r'rip [+-] 0x[0-9a-f]+', 'rip <target>', operands)
                 result.append(instruction.mnemonic + ' ' + operands)
@@ -208,7 +210,32 @@ class Binary:
         encoded = f'{len(class_name)}{class_name}'.encode() + b'\0'
         return self.tables_for_encoded(encoded)
 
-    def tables_for_encoded(self, encoded):
+    def type_names_containing(self, fragment):
+        names = set()
+        position = 0
+        while (position := self.raw.find(fragment.encode(), position)) >= 0:
+            start = self.raw.rfind(b'\0', max(0, position - 2000), position) + 1
+            end = self.raw.find(b'\0', position, position + 2000)
+            position += len(fragment)
+            if end < start:
+                continue
+            raw = self.raw[start:end]
+            if raw and len(raw) < 4000 and all(32 <= b <= 126 for b in raw):
+                name = raw.decode('ascii')
+                if name[0].isdigit() or name.startswith(('N', 'Z')):
+                    names.add(name)
+        return sorted(names)
+
+    def thunk_target(self, address):
+        if self.functions.get(address, 1000) <= 32:
+            for instruction in self.instructions(address):
+                if instruction.mnemonic == 'jmp' and instruction.op_str.startswith('0x'):
+                    target = int(instruction.op_str, 16)
+                    if target in self.functions:
+                        return target
+        return address
+
+    def tables_for_encoded(self, encoded, primary_only=True):
         tables = []
         position = 0
         while (position := self.raw.find(encoded, position)) >= 0:
@@ -217,8 +244,11 @@ class Binary:
             for name_pointer in self.references.get(address, []):
                 typeinfo = name_pointer - 8
                 for slot in self.references.get(typeinfo, []):
-                    if self.pointer(slot - 8) != 0:
-                        continue  # only primary address points
+                    top = self.pointer(slot - 8)
+                    if top & (1 << 63):
+                        top -= 1 << 64
+                    if (primary_only and top != 0) or not -100000 <= top <= 0:
+                        continue
                     table = []
                     for index in range(1200):
                         target = self.pointer(slot + 8 + index * 8)
@@ -226,7 +256,7 @@ class Binary:
                             break
                         table.append(target)
                     if table:
-                        tables.append({'address': slot + 8, 'slots': table})
+                        tables.append({'address': slot + 8, 'offset_to_top': top, 'slots': table})
         return tables
 
     def scan(self, signature):
@@ -334,6 +364,50 @@ def main():
                 if address:
                     candidates[address].append('LCG_constant_0x3c6ef35f')
         old_tokens = old.fingerprint(baseline[0])
+        # libc++ dropped allocator template arguments from __function::__func
+        # RTTI in this BDS build. Match the method/lambda fragment rather than
+        # assuming the complete encoded type name is unchanged.
+        fragment = None
+        use_callees = False
+        use_slots = False
+        if 'PlayerLocationSender24_forEachClientPlayerPair' in name:
+            fragment = '20PlayerLocationSender35checkPlayerPairsAndMaybeSendPackets'
+            use_callees = True
+        elif 'PlayerTickManager23processPlayerNetworking' in name:
+            fragment = '17PlayerTickManager23processPlayerNetworking'
+        elif 'InventoryTransaction23executeWorldInteraction' in name:
+            fragment = 'ZNK20InventoryTransaction18getExecuteFunctionERK15InventorySourceE3$_5'
+            use_slots = True
+        if fragment:
+            for typename in new.type_names_containing(fragment):
+                for table in new.tables_for_encoded(typename.encode() + b'\0'):
+                    if use_slots:
+                        for address in table['slots']:
+                            candidates[address].append('rtti_functor_slot:' + typename)
+                    else:
+                        for site in new.leas.get(table['address'], []):
+                            caller = new.containing(site)
+                            if caller is not None:
+                                addresses = new.calls(caller) if use_callees else {caller}
+                                for address in addresses:
+                                    candidates[address].append('rtti_method_fragment:' + fragment)
+        qualified = None
+        if 'LanThreadManager24SendLanBroadcastResponse' in name:
+            qualified = 'N9NetherNet16LanThreadManagerE'
+        elif 'TransportFactoryImpl24createTransportInterface' in name:
+            qualified = 'N9NetherNet12_GLOBAL__N_120TransportFactoryImplE'
+        if qualified:
+            old_tables = old.tables_for_encoded(qualified.encode() + b'\0', primary_only=False)
+            new_tables = new.tables_for_encoded(qualified.encode() + b'\0', primary_only=False)
+            for table in old_tables:
+                slots = [i for i, a in enumerate(table['slots']) if old.thunk_target(a) == baseline[0]]
+                for target_table in new_tables:
+                    if table['offset_to_top'] != target_table['offset_to_top']:
+                        continue
+                    for slot in slots:
+                        if slot < len(target_table['slots']):
+                            address = new.thunk_target(target_table['slots'][slot])
+                            candidates[address].append(f'qualified_vtable:{qualified}:top={table["offset_to_top"]}:slot={slot}:thunk_resolved')
         # Strings and functor RTTI in the function itself are stronger anchors
         # than address proximity, which changes drastically between BDS builds.
         for label in old.labels(baseline[0]):
@@ -364,7 +438,11 @@ def main():
             score = difflib.SequenceMatcher(None, old_tokens, new.fingerprint(address), autojunk=False).ratio()
             ranked.append({'address': hex(address), 'similarity': round(score, 5), 'size': new.functions[address],
                            'evidence': evidence, 'head': new.fingerprint(address)[:16]})
-        ranked.sort(key=lambda candidate: candidate['similarity'], reverse=True)
+        # Preserve the exact qualified-vtable anchor even when compiler changes
+        # make an unrelated constructor score higher by instruction similarity.
+        ranked.sort(key=lambda candidate: (
+            any(e.startswith('qualified_vtable:') for e in candidate['evidence']),
+            candidate['similarity']), reverse=True)
         entry = {'name': name, 'baseline_address': hex(baseline[0]),
                  'baseline_size': old.functions.get(baseline[0]), 'pattern_matches': len(matches),
                  'baseline_head': old_tokens[:20],

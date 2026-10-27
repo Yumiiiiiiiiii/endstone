@@ -26,6 +26,11 @@ RTTIから得たprimary vtableの長さにも差がある。Playerは246→247�
 Dimensionは50→51、ServerNetworkHandlerは107→111、Itemは132→133、BlockTypeは133→134。
 挿入位置や各slotの意味、フィールドの配置は引き続き確認が必要。長さだけでnative headerを変更しない。
 Actionsは署名診断が失敗した場合も比較解析を保存するが、失敗を成功へ変換しない。
+`align_linux_vtables.py`は同じ引数でvtableの挿入位置候補を出力する。Playerのslot233、Dimensionのslot3、
+ServerNetworkHandlerのslot35/63/101/102などが候補だが、同じ実装を持つslotの曖昧さを含む。
+これらをメソッド名や型の同定済み位置として扱わない。
+関数解析ではlibc++ functorのRTTI型名変更とNetherNetの副vtable／this調整thunkも追跡する。
+間接callの`[vptr+offset]`はABIの証拠なので、命令比較でアドレスとして消さずに保持する。
 
 ## ブランチ
 

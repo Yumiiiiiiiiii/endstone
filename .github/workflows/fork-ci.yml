@@ -114,6 +114,11 @@ jobs:
                           '--target',str(cache/new['archive_filename']),
                           '--target-version',config['requested_bds'],
                           '--output','reports/native-candidates-linux.json'],check=True)
+          subprocess.run([sys.executable,'fork/align_linux_vtables.py',
+                          '--baseline',str(cache/old['archive_filename']),
+                          '--target',str(cache/new['archive_filename']),
+                          '--target-version',config['requested_bds'],
+                          '--output','reports/vtable-alignment-linux.json'],check=True)
           PY
       - uses: actions/upload-artifact@v7
         if: always()

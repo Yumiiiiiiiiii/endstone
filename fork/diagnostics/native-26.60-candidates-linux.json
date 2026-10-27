@@ -391,7 +391,7 @@
             " mov rax, qword ptr [rsi]",
             "-lea rdi, [rsp + 0x98]",
             "+lea rdi, [rsp + 0x70]",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x118]",
             "-mov rax, qword ptr [rsp + 0x98]",
             "-mov qword ptr [rsp + 0x100], rax",
             "+mov rax, qword ptr [rsp + 0x70]",
@@ -590,7 +590,7 @@
             "-mov rax, qword ptr [rip <target>]",
             "-lea rdi, [rip <target>]",
             "-mov rsi, rbx",
-            "-call qword ptr [rax + <target>]",
+            "-call qword ptr [rax + 0x10]",
             "-mov r12, rax",
             "-test rax, rax",
             "-je <target>",
@@ -835,7 +835,7 @@
             "mov qword ptr [rsp + 0x30], r14",
             "mov rax, qword ptr [rdi]",
             "mov rsi, r14",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x700]",
             "mov rdi, qword ptr [rsp + 0x30]",
             "cmp rdi, r14",
             "je <target>"
@@ -950,7 +950,7 @@
         "je <target>",
         "mov rax, qword ptr [rdi]",
         "mov qword ptr [rsp + 0x10], r12",
-        "call qword ptr [rax + <target>]"
+        "call qword ptr [rax + 0x150]"
       ],
       "candidates": [
         {
@@ -961,12 +961,12 @@
             "LCG_constant_0x3c6ef35f",
             "LCG_constant_0x3c6ef35f",
             "LCG_constant_0x3c6ef35f",
-            "self_rtti:15StringByteInput",
-            "self_rtti:21DefaultDataLoadHelper",
-            "self_string:1 Actor _setPos",
+            "self_string:2 _deserializeEntity",
             "self_rtti:15XoroshiroRandom",
+            "self_string:1 Actor _setPos",
+            "self_rtti:15StringByteInput",
             "self_rtti:N2br8worldgen14WorldGenRandomE",
-            "self_string:2 _deserializeEntity"
+            "self_rtti:21DefaultDataLoadHelper"
           ],
           "head": [
             "push rbp",
@@ -1011,17 +1011,16 @@
             "-mov qword ptr [rsp + 0x10], r12",
             "+mov qword ptr [rsp], rbx",
             "+mov rax, qword ptr [rdi]",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x150]",
             " mov rdi, rax",
             " mov rax, qword ptr [rax]",
             "-mov qword ptr [rsp + 0x68], rdi",
-            "-call qword ptr [rax + <target>]",
+            "+mov qword ptr [rsp + 0x110], rdi",
+            " call qword ptr [rax + 0xa70]",
             "-mov qword ptr [rsp + 0x18], rax",
             "-cmp dword ptr [r12 + 0x1114], 0",
             "-je <target>",
             "-movzx eax, byte ptr [r12 + 0x70]",
-            "+mov qword ptr [rsp + 0x110], rdi",
-            "+call qword ptr [rax + <target>]",
             "+mov rcx, qword ptr [rsp]",
             "+cmp dword ptr [rcx + 0x118c], 0",
             "+je <target>",
@@ -1086,7 +1085,7 @@
             "-lea rsi, [rsp + 0x90]",
             "+lea rsi, [rsp + 0x80]",
             " xor edx, edx",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x90]",
             " test al, al",
             "-je <target>",
             "-mov rdi, qword ptr [r12 + 0x28]",
@@ -1097,7 +1096,7 @@
             "+mov rdi, qword ptr [rdi + 0x28]",
             "+mov rbx, qword ptr [rax + 0x100]",
             " mov rax, qword ptr [rdi]",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0xac0]",
             "@@ -86,8 +82,9 @@\n",
             " add ecx, dword ptr [rbx + 8]",
             " movsxd rax, ecx",
@@ -1136,7 +1135,8 @@
             "+mov rax, qword ptr [rsp]",
             "+mov dword ptr [rax + 0x118c], 1",
             "+mov rdi, qword ptr [rsp]",
-            " jmp <target>"
+            " jmp <target>",
+            " shr eax, 1"
           ]
         },
         {
@@ -1167,7 +1167,7 @@
         },
         {
           "address": "0xbcb2b40",
-          "similarity": 0.1182,
+          "similarity": 0.11584,
           "size": 2234,
           "evidence": [
             "self_string:1 Actor _setPos"
@@ -1193,7 +1193,7 @@
         },
         {
           "address": "0xc08f3b0",
-          "similarity": 0.10417,
+          "similarity": 0.1025,
           "size": 10507,
           "evidence": [
             "self_string:1 Actor _setPos"
@@ -1238,7 +1238,7 @@
             "mov r15, rdi",
             "mov rdi, qword ptr [rdi + 8]",
             "mov rax, qword ptr [rdi]",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x88]",
             "test al, al",
             "je <target>"
           ]
@@ -1273,7 +1273,291 @@
         "cmp r15, r12",
         "je <target>"
       ],
-      "candidates": [],
+      "candidates": [
+        {
+          "address": "0xcdef6f0",
+          "similarity": 0.52342,
+          "size": 1104,
+          "evidence": [
+            "rtti_method_fragment:20PlayerLocationSender35checkPlayerPairsAndMaybeSendPackets",
+            "rtti_method_fragment:20PlayerLocationSender35checkPlayerPairsAndMaybeSendPackets"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r13",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x68",
+            "mov qword ptr [rsp + 0x40], rdx",
+            "mov r12, qword ptr [rsi]",
+            "mov qword ptr [rsp + 0x30], rsi",
+            "mov r14, qword ptr [rsi + 8]",
+            "cmp r12, r14",
+            "je <target>",
+            "mov ebx, 0x3ffff",
+            "jmp <target>",
+            "nop "
+          ],
+          "instruction_diff": [
+            "--- 1.26.52\n",
+            "+++ 1.26.60\n",
+            "@@ -6,23 +6,22 @@\n",
+            " push rbx",
+            " sub rsp, 0x68",
+            "-mov qword ptr [rsp + 0x60], rdx",
+            "-mov r15, qword ptr [rsi]",
+            "-mov r12, qword ptr [rsi + 8]",
+            "-cmp r15, r12",
+            "-je <target>",
+            "-mov r14, rsi",
+            "-mov ebp, 0xffffffff",
+            "+mov qword ptr [rsp + 0x40], rdx",
+            "+mov r12, qword ptr [rsi]",
+            "+mov qword ptr [rsp + 0x30], rsi",
+            "+mov r14, qword ptr [rsi + 8]",
+            "+cmp r12, r14",
+            "+je <target>",
+            " mov ebx, 0x3ffff",
+            " jmp <target>",
+            "-nop word ptr cs:[rax + rax]",
+            "-add r15, 0x18",
+            "-cmp r15, r12",
+            "+nop ",
+            "+add r12, 0x18",
+            "+cmp r12, r14",
+            " je <target>",
+            " mov byte ptr [rsp + 0x10], 0",
+            " mov byte ptr [rsp + 0x28], 0",
+            "-mov rdi, qword ptr [r15 + 8]",
+            "-test rdi, rdi",
+            "-je <target>",
+            "-mov eax, dword ptr [r15 + 0x10]",
+            "+mov rdi, qword ptr [r12 + 8]",
+            "+test rdi, rdi",
+            "+je <target>",
+            "+mov eax, dword ptr [r12 + 0x10]",
+            " and eax, ebx",
+            " cmp eax, 0x3ffff",
+            "@@ -31,8 +30,8 @@\n",
+            " test rax, rax",
+            " je <target>",
+            "-mov rcx, qword ptr [r15]",
+            "+mov rcx, qword ptr [r12]",
+            " test rcx, rcx",
+            " je <target>",
+            "-mov edx, dword ptr [r15 + 0x10]",
+            "+mov edx, dword ptr [r12 + 0x10]",
+            " mov esi, edx",
+            " and esi, 0x3ffff",
+            "@@ -63,5 +62,5 @@\n",
+            " mov dword ptr [rsp + 0x20], edx",
+            " mov byte ptr [rsp + 0x28], 1",
+            "-nop dword ptr [rax + rax]",
+            "+nop dword ptr [rax]",
+            " mov rcx, 0xffffffffffffffff",
+            " lock xadd qword ptr [rax + 8], rcx",
+            "@@ -71,5 +70,5 @@\n",
+            " cmp byte ptr [rsp + 0x28], 1",
+            " jne <target>",
+            "-mov r9, qword ptr [rsp + 0x18]",
+            "+mov rsi, qword ptr [rsp + 0x18]",
+            " mov eax, dword ptr [rsp + 0x20]",
+            " mov ecx, eax",
+            "@@ -77,138 +76,101 @@\n",
+            " mov edx, ecx",
+            " shr edx, 0xb",
+            "-mov rsi, qword ptr [r9 + 0xb0]",
+            "-mov rdi, qword ptr [r9 + 0xb8]",
+            "-sub rdi, rsi",
+            "-sar rdi, 3",
+            "-cmp rdx, rdi",
+            "-jae <target>",
+            "-mov rsi, qword ptr [rsi + rdx*8]",
+            "-test rsi, rsi",
+            "+mov rdi, qword ptr [rsi + 0xb0]",
+            "+mov r8, qword ptr [rsi + 0xb8]",
+            "+sub r8, rdi",
+            "+sar r8, 3",
+            "+cmp rdx, r8",
+            "+jae <target>",
+            "+mov rdi, qword ptr [rdi + rdx*8]",
+            "+test rdi, rdi",
+            " je <target>",
+            " and ecx, 0x7ff",
+            "-mov edi, ecx",
+            "+mov r8d, ecx",
+            " and eax, 0xfffc0000",
+            "-mov esi, dword ptr [rsi + rdi*4]",
+            "-mov edi, esi",
+            "-xor edi, eax",
+            "-cmp edi, 0x3fffe",
+            "-ja <target>",
+            "-and esi, 0x3ffff",
+            "-cmp qword ptr [r9 + 0xf0], rsi",
+            "+mov edi, dword ptr [rdi + r8*4]",
+            "+mov r8d, edi",
+            "+xor r8d, eax",
+            "+cmp r8d, 0x3fffe",
+            "+ja <target>",
+            "+and edi, 0x3ffff",
+            "+cmp qword ptr [rsi + 0xf0], rdi",
+            " jbe <target>",
+            "-mov rdi, qword ptr [r9 + 0x38]",
+            "-mov r8, qword ptr [r9 + 0x40]",
+            "-sub r8, rdi",
+            "-shr r8, 3",
+            "-lea esi, [r8 - 1]",
+            "-and esi, 0xb845379",
+            "-lea r10, [rdi + rsi*8]",
+            "-mov rsi, qword ptr [r9 + 0x50]",
+            "-mov r11, qword ptr [r10]",
+            "-cmp r11, -1",
+            "-je <target>",
+            "-shl r11, 5",
+            "-lea r10, [rsi + r11]",
+            "-cmp dword ptr [rsi + r11 + 8], 0xb845379",
+            "-jne <target>",
+            "-mov r9, qword ptr [r9 + 0x58]",
+            "-cmp r10, r9",
+            "+mov edi, dword ptr [rsi + 0x40]",
+            "+mov r8, qword ptr [rsi + 0x38]",
+            "+sub edi, r8d",
+            "+shr edi, 3",
+            "+dec edi",
+            "+and edi, 0xb845379",
+            "+lea rdi, [r8 + rdi*8]",
+            "+mov r8, qword ptr [rsi + 0x50]",
+            "+nop word ptr cs:[rax + rax]",
+            "+mov r9, qword ptr [rdi]",
+            "+cmp r9, -1",
+            "+je <target>",
+            "+shl r9, 5",
+            "+lea rdi, [r8 + r9]",
+            "+cmp dword ptr [r8 + r9 + 8], 0xb845379",
+            "+jne <target>",
+            "+mov rsi, qword ptr [rsi + 0x58]",
+            "+cmp rdi, rsi",
+            " jne <target>",
+            " jmp <target>",
+            " mov rcx, qword ptr [rax]",
+            " mov rdi, rax",
+            "-mov r13, rax",
+            "+mov r15, rax",
+            " call qword ptr [rcx + 0x10]",
+            "-mov rdi, r13",
+            "+mov rdi, r15",
+            " call <target>",
+            " cmp byte ptr [rsp + 0x28], 1",
+            " je <target>"
+          ]
+        },
+        {
+          "address": "0xce151b0",
+          "similarity": 0.29317,
+          "size": 567,
+          "evidence": [
+            "rtti_method_fragment:20PlayerLocationSender35checkPlayerPairsAndMaybeSendPackets"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x50",
+            "mov rbx, rdi",
+            "mov rdi, qword ptr [rsi + 0x20]",
+            "test rdi, rdi",
+            "je <target>",
+            "cmp rdi, rsi",
+            "je <target>",
+            "mov qword ptr [rsp + 0x40], rdi",
+            "mov qword ptr [rsi + 0x20], 0",
+            "jmp <target>",
+            "lea rsi, [rsp + 0x20]"
+          ]
+        },
+        {
+          "address": "0xcdef150",
+          "similarity": 0.28062,
+          "size": 382,
+          "evidence": [
+            "rtti_method_fragment:20PlayerLocationSender35checkPlayerPairsAndMaybeSendPackets"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r13",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x28",
+            "mov r12, qword ptr [rsi]",
+            "mov r13, qword ptr [rsi + 8]",
+            "cmp r12, r13",
+            "je <target>",
+            "mov rbx, rdi",
+            "mov ebp, 0x3ffff",
+            "lea r14, [rsp + 8]",
+            "jmp <target>",
+            "nop dword ptr [rax]"
+          ]
+        },
+        {
+          "address": "0xce9dbc0",
+          "similarity": 0.22913,
+          "size": 1007,
+          "evidence": [
+            "rtti_method_fragment:20PlayerLocationSender35checkPlayerPairsAndMaybeSendPackets"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r13",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x18",
+            "mov rbx, qword ptr [rdi]",
+            "mov qword ptr [rsp], rdi",
+            "mov r15, qword ptr [rdi + 8]",
+            "cmp rbx, r15",
+            "je <target>",
+            "lea r14, [rsp + 0xc]",
+            "jmp <target>",
+            "nop word ptr cs:[rax + rax]",
+            "add r15, -0x20"
+          ]
+        },
+        {
+          "address": "0xce14660",
+          "similarity": 0.17129,
+          "size": 1842,
+          "evidence": [
+            "rtti_method_fragment:20PlayerLocationSender35checkPlayerPairsAndMaybeSendPackets"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r13",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x28",
+            "mov r14, qword ptr [rdi + 0x38]",
+            "mov rbp, qword ptr [rdi + 0x40]",
+            "cmp r14, rbp",
+            "je <target>",
+            "mov rbx, rdi",
+            "lea rax, [rdi + 0x1c8]",
+            "mov qword ptr [rsp + 0x20], rax",
+            "xor eax, eax",
+            "lea r12, [rsp + 4]"
+          ]
+        }
+      ],
       "manual_abi_review_required": true
     },
     {
@@ -1448,7 +1732,7 @@
             "mov rcx, qword ptr [rax]",
             "mov rdi, rax",
             "xor esi, esi",
-            "call qword ptr [rcx + <target>]",
+            "call qword ptr [rcx + 0x40]",
             "mov r14, rax",
             "mov rax, qword ptr [rax + 8]",
             "test rax, rax",
@@ -1486,7 +1770,293 @@
         "mov rax, qword ptr [r14]",
         "cmp byte ptr [rax], 0"
       ],
-      "candidates": [],
+      "candidates": [
+        {
+          "address": "0xcda8d00",
+          "similarity": 0.61081,
+          "size": 716,
+          "evidence": [
+            "rtti_method_fragment:17PlayerTickManager23processPlayerNetworking",
+            "rtti_method_fragment:17PlayerTickManager23processPlayerNetworking",
+            "rtti_method_fragment:17PlayerTickManager23processPlayerNetworking",
+            "rtti_method_fragment:17PlayerTickManager23processPlayerNetworking"
+          ],
+          "head": [
+            "push r15",
+            "push r14",
+            "push rbx",
+            "sub rsp, 0xc0",
+            "mov rbx, rsi",
+            "mov r14, rdi",
+            "mov rax, qword ptr [rdi]",
+            "test rax, rax",
+            "je <target>",
+            "cmp byte ptr [rax], 0",
+            "jne <target>",
+            "mov dword ptr [0], 0xdeadc0de",
+            "mov rdi, qword ptr [r14 + 0x10]",
+            "lea rax, [rip <target>]",
+            "mov qword ptr [rsp + 0x90], rax",
+            "mov qword ptr [rsp + 0x98], r14"
+          ],
+          "instruction_diff": [
+            "--- 1.26.52\n",
+            "+++ 1.26.60\n",
+            "@@ -5,28 +5,9 @@\n",
+            " mov rbx, rsi",
+            " mov r14, rdi",
+            "-cmp qword ptr [rdi], 0",
+            "-jne <target>",
+            "-lea rdi, [rip <target>]",
+            "-lea rsi, [rip <target>]",
+            "-lea rcx, [rip <target>]",
+            "-lea r8, [rip <target>]",
+            "-mov edx, 0x12c",
+            "-xor eax, eax",
+            "-call <target>",
+            "-test al, al",
+            "+mov rax, qword ptr [rdi]",
+            "+test rax, rax",
+            " je <target>",
+            "-mov dword ptr [0], 0xdeadc0de",
+            "-mov rax, qword ptr [r14]",
+            " cmp byte ptr [rax], 0",
+            " jne <target>",
+            "-lea rdi, [rip <target>]",
+            "-lea rsi, [rip <target>]",
+            "-lea rcx, [rip <target>]",
+            "-lea r8, [rip <target>]",
+            "-mov edx, 0x130",
+            "-xor eax, eax",
+            "-call <target>",
+            "-test al, al",
+            "-je <target>",
+            " mov dword ptr [0], 0xdeadc0de",
+            " mov rdi, qword ptr [r14 + 0x10]",
+            "@@ -44,34 +25,9 @@\n",
+            " test rdi, rdi",
+            " jne <target>",
+            "-cmp qword ptr [r14 + 0x18], 0",
+            "-jne <target>",
+            "-jmp <target>",
+            "-mov eax, 0x20",
+            "-mov rcx, qword ptr [rdi]",
+            "-call qword ptr [rcx + rax]",
+            "-cmp qword ptr [r14 + 0x18], 0",
+            "-jne <target>",
+            "-lea rdi, [rip <target>]",
+            "-lea rsi, [rip <target>]",
+            "-lea rcx, [rip <target>]",
+            "-lea r8, [rip <target>]",
+            "-mov edx, 0x12c",
+            "-xor eax, eax",
+            "-call <target>",
+            "-test al, al",
+            "+mov rax, qword ptr [r14 + 0x18]",
+            "+test rax, rax",
+            " je <target>",
+            "-mov dword ptr [0], 0xdeadc0de",
+            "-mov rax, qword ptr [r14 + 0x18]",
+            " cmp byte ptr [rax], 0",
+            " jne <target>",
+            "-lea rdi, [rip <target>]",
+            "-lea rsi, [rip <target>]",
+            "-lea rcx, [rip <target>]",
+            "-lea r8, [rip <target>]",
+            "-mov edx, 0x130",
+            "-xor eax, eax",
+            "-call <target>",
+            "-test al, al",
+            "-je <target>",
+            " mov dword ptr [0], 0xdeadc0de",
+            " mov rdi, qword ptr [r14 + 0x28]",
+            "@@ -90,34 +46,9 @@\n",
+            " test rdi, rdi",
+            " jne <target>",
+            "-cmp qword ptr [r14], 0",
+            "-jne <target>",
+            "-jmp <target>",
+            "-mov eax, 0x20",
+            "-mov rcx, qword ptr [rdi]",
+            "-call qword ptr [rcx + rax]",
+            "-cmp qword ptr [r14], 0",
+            "-jne <target>",
+            "-lea rdi, [rip <target>]",
+            "-lea rsi, [rip <target>]",
+            "-lea rcx, [rip <target>]",
+            "-lea r8, [rip <target>]",
+            "-mov edx, 0x12c",
+            "-xor eax, eax",
+            "-call <target>",
+            "-test al, al",
+            "+mov rax, qword ptr [r14]",
+            "+test rax, rax",
+            " je <target>",
+            "-mov dword ptr [0], 0xdeadc0de",
+            "-mov rax, qword ptr [r14]",
+            " cmp byte ptr [rax], 0",
+            " jne <target>",
+            "-lea rdi, [rip <target>]",
+            "-lea rsi, [rip <target>]",
+            "-lea rcx, [rip <target>]",
+            "-lea r8, [rip <target>]",
+            "-mov edx, 0x130",
+            "-xor eax, eax",
+            "-call <target>",
+            "-test al, al",
+            "-je <target>",
+            " mov dword ptr [0], 0xdeadc0de",
+            " mov rdi, qword ptr [r14 + 0x10]",
+            "@@ -135,34 +66,9 @@\n",
+            " test rdi, rdi",
+            " jne <target>",
+            "-cmp qword ptr [r14 + 0x18], 0",
+            "-jne <target>",
+            "-jmp <target>",
+            "-mov eax, 0x20",
+            "-mov rcx, qword ptr [rdi]",
+            "-call qword ptr [rcx + rax]",
+            "-cmp qword ptr [r14 + 0x18], 0",
+            "-jne <target>",
+            "-lea rdi, [rip <target>]",
+            "-lea rsi, [rip <target>]",
+            "-lea rcx, [rip <target>]",
+            "-lea r8, [rip <target>]",
+            "-mov edx, 0x12c",
+            "-xor eax, eax",
+            "-call <target>",
+            "-test al, al",
+            "+mov rax, qword ptr [r14 + 0x18]",
+            "+test rax, rax",
+            " je <target>",
+            "-mov dword ptr [0], 0xdeadc0de",
+            "-mov rax, qword ptr [r14 + 0x18]",
+            " cmp byte ptr [rax], 0",
+            " jne <target>",
+            "-lea rdi, [rip <target>]",
+            "-lea rsi, [rip <target>]",
+            "-lea rcx, [rip <target>]",
+            "-lea r8, [rip <target>]",
+            "-mov edx, 0x130",
+            "-xor eax, eax",
+            "-call <target>",
+            "-test al, al",
+            "-je <target>",
+            " mov dword ptr [0], 0xdeadc0de",
+            " mov rdi, qword ptr [r14 + 0x28]",
+            "@@ -181,4 +87,38 @@\n",
+            " test rdi, rdi",
+            " jne <target>",
+            "+jmp <target>",
+            "+mov dword ptr [0], 0xdeadc0de",
+            "+cmp byte ptr [rax], 0"
+          ]
+        },
+        {
+          "address": "0xcdcc920",
+          "similarity": 0.06723,
+          "size": 78,
+          "evidence": [
+            "rtti_method_fragment:17PlayerTickManager23processPlayerNetworking"
+          ],
+          "head": [
+            "push r14",
+            "push rbx",
+            "push rax",
+            "mov rbx, rdi",
+            "mov rax, qword ptr [rip <target>]",
+            "lea rdi, [rip <target>]",
+            "mov esi, 0x10",
+            "call qword ptr [rax + 0x10]",
+            "test rax, rax",
+            "je <target>",
+            "mov rcx, qword ptr [rbx + 8]",
+            "lea rdx, [rip <target>]",
+            "mov qword ptr [rax], rdx",
+            "mov qword ptr [rax + 8], rcx",
+            "add rsp, 8",
+            "pop rbx"
+          ]
+        },
+        {
+          "address": "0xcdcca10",
+          "similarity": 0.06723,
+          "size": 78,
+          "evidence": [
+            "rtti_method_fragment:17PlayerTickManager23processPlayerNetworking"
+          ],
+          "head": [
+            "push r14",
+            "push rbx",
+            "push rax",
+            "mov rbx, rdi",
+            "mov rax, qword ptr [rip <target>]",
+            "lea rdi, [rip <target>]",
+            "mov esi, 0x18",
+            "call qword ptr [rax + 0x10]",
+            "test rax, rax",
+            "je <target>",
+            "lea rcx, [rip <target>]",
+            "mov qword ptr [rax], rcx",
+            "movups xmm0, xmmword ptr [rbx + 8]",
+            "movups xmmword ptr [rax + 8], xmm0",
+            "add rsp, 8",
+            "pop rbx"
+          ]
+        },
+        {
+          "address": "0xcdcccc0",
+          "similarity": 0.06723,
+          "size": 78,
+          "evidence": [
+            "rtti_method_fragment:17PlayerTickManager23processPlayerNetworking"
+          ],
+          "head": [
+            "push r14",
+            "push rbx",
+            "push rax",
+            "mov rbx, rdi",
+            "mov rax, qword ptr [rip <target>]",
+            "lea rdi, [rip <target>]",
+            "mov esi, 0x10",
+            "call qword ptr [rax + 0x10]",
+            "test rax, rax",
+            "je <target>",
+            "mov rcx, qword ptr [rbx + 8]",
+            "lea rdx, [rip <target>]",
+            "mov qword ptr [rax], rdx",
+            "mov qword ptr [rax + 8], rcx",
+            "add rsp, 8",
+            "pop rbx"
+          ]
+        },
+        {
+          "address": "0xcdccdb0",
+          "similarity": 0.06723,
+          "size": 78,
+          "evidence": [
+            "rtti_method_fragment:17PlayerTickManager23processPlayerNetworking"
+          ],
+          "head": [
+            "push r14",
+            "push rbx",
+            "push rax",
+            "mov rbx, rdi",
+            "mov rax, qword ptr [rip <target>]",
+            "lea rdi, [rip <target>]",
+            "mov esi, 0x18",
+            "call qword ptr [rax + 0x10]",
+            "test rax, rax",
+            "je <target>",
+            "lea rcx, [rip <target>]",
+            "mov qword ptr [rax], rcx",
+            "movups xmm0, xmmword ptr [rbx + 8]",
+            "movups xmmword ptr [rax + 8], xmm0",
+            "add rsp, 8",
+            "pop rbx"
+          ]
+        }
+      ],
       "manual_abi_review_required": true
     },
     {
@@ -1519,7 +2089,7 @@
       "candidates": [
         {
           "address": "0xa141110",
-          "similarity": 0.24979,
+          "similarity": 0.24648,
           "size": 1536,
           "evidence": [
             "vtable:ServerPlayer:old_slots=[247]:new_slot=248",
@@ -1626,9 +2196,6 @@
             "-mov r13d, dword ptr [rbx + 0xcd0]",
             "-mov rax, qword ptr [rbx]",
             "-mov rdi, rbx",
-            "-call qword ptr [rax + <target>]",
-            "-mov ebx, eax",
-            "-mov rdi, qword ptr [r14 + 8]",
             "+pshufd xmm1, xmm0, 0x55",
             "+movdqa xmmword ptr [rsp + 0x20], xmm0",
             "+movd dword ptr [rsp + 0x14], xmm0",
@@ -1637,11 +2204,13 @@
             "+mov ebx, dword ptr [r14 + 0xcf0]",
             "+mov rax, qword ptr [r14]",
             "+mov rdi, r14",
-            "+call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x688]",
+            "-mov ebx, eax",
+            "-mov rdi, qword ptr [r14 + 8]",
             "+mov ebp, eax",
             "+mov rdi, qword ptr [r13 + 8]",
             " mov rax, qword ptr [rdi]",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x9f0]",
             " test al, al",
             " jne <target>",
             "-mov rax, qword ptr [r14 + 0xf0]",
@@ -1668,37 +2237,38 @@
             "-lea rdx, [rsp + 0x90]",
             "-lea rcx, [rsp + 0x100]",
             "-mov rdi, rbx",
-            "-call qword ptr [rax + <target>]",
-            "-mov rax, qword ptr [rbx]",
-            "-mov rdi, rbx",
-            "-call qword ptr [rax + <target>]",
-            "-movsxd rax, dword ptr [r14 + 0xd4]",
-            "-mov qword ptr [rsp + 0x10], rax",
-            "-movsxd rbx, dword ptr [r14 + 0xd8]",
-            "-movsxd r12, dword ptr [r14 + 0xdc]",
-            "-mov rdi, qword ptr [r14 + 8]",
             "+mov r14, qword ptr [rax + 0x3a8]",
             "+mov esi, dword ptr [r13 + 0xe4]",
             "+mov rax, qword ptr [r14]",
             "+lea rdx, [rsp + 0x58]",
             "+lea rcx, [rsp + 0x48]",
             "+mov rdi, r14",
-            "+call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x28]",
+            "-mov rax, qword ptr [rbx]",
+            "-mov rdi, rbx",
             "+mov rax, qword ptr [r14]",
             "+mov rdi, r14",
-            "+call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x38]",
+            "-movsxd rax, dword ptr [r14 + 0xd4]",
+            "-mov qword ptr [rsp + 0x10], rax",
+            "-movsxd rbx, dword ptr [r14 + 0xd8]",
+            "-movsxd r12, dword ptr [r14 + 0xdc]",
+            "-mov rdi, qword ptr [r14 + 8]",
             "+movsxd rbp, dword ptr [r13 + 0xd4]",
             "+movsxd r12, dword ptr [r13 + 0xd8]",
             "+movsxd r14, dword ptr [r13 + 0xdc]",
             "+mov rdi, qword ptr [r13 + 8]",
             " mov rax, qword ptr [rdi]",
-            " call qword ptr [rax + <target>]",
-            " test al, al"
+            " call qword ptr [rax + 0xc38]",
+            " test al, al",
+            " je <target>",
+            "-cmp byte ptr [r14 + 0x188], 1",
+            "-jne <target>"
           ]
         },
         {
           "address": "0xbcd20b0",
-          "similarity": 0.12077,
+          "similarity": 0.10619,
           "size": 4345,
           "evidence": [
             "vtable:ServerPlayer:old_slots=[247]:new_slot=203"
@@ -1719,38 +2289,12 @@
             "test rdi, rdi",
             "je <target>",
             "mov rax, qword ptr [rdi]",
-            "call qword ptr [rax + <target>]"
-          ]
-        },
-        {
-          "address": "0xbcf4ef0",
-          "similarity": 0.10518,
-          "size": 1735,
-          "evidence": [
-            "vtable:ServerPlayer:old_slots=[247]:new_slot=116"
-          ],
-          "head": [
-            "push rbp",
-            "push r15",
-            "push r14",
-            "push r13",
-            "push r12",
-            "push rbx",
-            "sub rsp, 0x2b8",
-            "mov rbx, rdi",
-            "mov rdi, qword ptr [rdi + 0x1e8]",
-            "test rdi, rdi",
-            "je <target>",
-            "mov r14, rsi",
-            "mov ebp, edx",
-            "call <target>",
-            "test rax, rax",
-            "je <target>"
+            "call qword ptr [rax + 0x9f0]"
           ]
         },
         {
           "address": "0xa145430",
-          "similarity": 0.10342,
+          "similarity": 0.10183,
           "size": 1856,
           "evidence": [
             "vtable:ServerPlayer:old_slots=[247]:new_slot=164"
@@ -1776,7 +2320,7 @@
         },
         {
           "address": "0xa141d10",
-          "similarity": 0.09956,
+          "similarity": 0.09778,
           "size": 1022,
           "evidence": [
             "vtable:ServerPlayer:old_slots=[247]:new_slot=158"
@@ -1798,6 +2342,32 @@
             "je <target>",
             "call <target>",
             "test rax, rax"
+          ]
+        },
+        {
+          "address": "0xbcf4ef0",
+          "similarity": 0.09562,
+          "size": 1735,
+          "evidence": [
+            "vtable:ServerPlayer:old_slots=[247]:new_slot=116"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r13",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x2b8",
+            "mov rbx, rdi",
+            "mov rdi, qword ptr [rdi + 0x1e8]",
+            "test rdi, rdi",
+            "je <target>",
+            "mov r14, rsi",
+            "mov ebp, edx",
+            "call <target>",
+            "test rax, rax",
+            "je <target>"
           ]
         }
       ],
@@ -1836,9 +2406,9 @@
           "similarity": 0.6778,
           "size": 4328,
           "evidence": [
-            "self_rtti:14ServerWaypoint",
             "self_rtti:20ServerPlayerWaypoint",
             "self_rtti:20ServerEntityWaypoint",
+            "self_rtti:14ServerWaypoint",
             "callgraph:old_caller=0x9e6d160:new_caller=0xa140360"
           ],
           "head": [
@@ -1903,7 +2473,7 @@
             "+je <target>",
             "+mov rdi, qword ptr [r13 + 0x1f0]",
             " mov rax, qword ptr [rdi]",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0xa00]",
             "-mov rbp, qword ptr [rax + 0x10]",
             "-test rbp, rbp",
             "-je <target>",
@@ -1986,7 +2556,7 @@
             "-lea r13, [rip <target>]",
             "-mov rdi, r13",
             "+lea rdi, [rip <target>]",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x10]",
             "-mov r12, rax",
             "+mov r15, rax",
             " test rax, rax",
@@ -2005,7 +2575,7 @@
             "-mov qword ptr [rsp + 0x128], r12",
             "+lea rdi, [rip <target>]",
             "+mov qword ptr [rsp + 0x128], r15",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x10]",
             " mov rbx, rax",
             "@@ -143,35 +139,35 @@\n",
             " mov rax, qword ptr [rip <target>]",
@@ -2017,9 +2587,9 @@
           "similarity": 0.1879,
           "size": 1366,
           "evidence": [
-            "self_rtti:14ServerWaypoint",
             "self_rtti:20ServerPlayerWaypoint",
-            "self_rtti:20ServerEntityWaypoint"
+            "self_rtti:20ServerEntityWaypoint",
+            "self_rtti:14ServerWaypoint"
           ],
           "head": [
             "push rbp",
@@ -2045,8 +2615,8 @@
           "similarity": 0.18299,
           "size": 1306,
           "evidence": [
-            "self_rtti:14ServerWaypoint",
-            "self_rtti:20ServerEntityWaypoint"
+            "self_rtti:20ServerEntityWaypoint",
+            "self_rtti:14ServerWaypoint"
           ],
           "head": [
             "push rbp",
@@ -2095,7 +2665,7 @@
         },
         {
           "address": "0x9ca03e0",
-          "similarity": 0.10034,
+          "similarity": 0.09694,
           "size": 1196,
           "evidence": [
             "callgraph:old_caller=0x9e6d160:new_caller=0xa140360"
@@ -2112,7 +2682,7 @@
             "mov qword ptr [rsp + 0x60], rsi",
             "mov rbx, rdi",
             "mov rax, qword ptr [rdi]",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x18]",
             "mov rbp, qword ptr [rbx + 0xa8]",
             "mov qword ptr [rsp + 0x40], rbp",
             "mov qword ptr [rbx + 0xa8], 0",
@@ -2936,7 +3506,7 @@
             "mov rax, qword ptr [rip <target>]",
             "lea rdi, [rip <target>]",
             "mov esi, 0x20",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x10]",
             "mov r12, rax",
             "mov r14, rax"
           ]
@@ -2968,32 +3538,6 @@
           ]
         },
         {
-          "address": "0xcde9010",
-          "similarity": 0.16,
-          "size": 1766,
-          "evidence": [
-            "self_rtti:11CompoundTag"
-          ],
-          "head": [
-            "push rbp",
-            "push r15",
-            "push r14",
-            "push r13",
-            "push r12",
-            "push rbx",
-            "sub rsp, 0xc8",
-            "mov r12, r8",
-            "mov r13, rcx",
-            "mov r15, rdx",
-            "mov rbx, rsi",
-            "mov r14, rdi",
-            "mov rdi, rsi",
-            "call <target>",
-            "test r12, r12",
-            "je <target>"
-          ]
-        },
-        {
           "address": "0xd42ce50",
           "similarity": 0.1599,
           "size": 3050,
@@ -3018,6 +3562,33 @@
             "mov rbx, rdi",
             "add r12, 0x10",
             "lea r15, [rip <target>]"
+          ]
+        },
+        {
+          "address": "0xcce30e0",
+          "similarity": 0.15882,
+          "size": 1211,
+          "evidence": [
+            "self_rtti:11CompoundTag",
+            "self_rtti:9StringTag"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r13",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x88",
+            "mov ebp, esi",
+            "mov rbx, rdi",
+            "lea r14, [rdi + 0x100]",
+            "mov rsi, qword ptr [rdi + 0x100]",
+            "mov qword ptr [rsp + 0x10], r14",
+            "lea rdi, [rsp + 0x10]",
+            "call <target>",
+            "mov qword ptr [rbx + 0xf8], r14",
+            "xorps xmm0, xmm0"
           ]
         }
       ],
@@ -3119,7 +3690,7 @@
             "+mov rcx, qword ptr [rax]",
             "+mov rdi, rax",
             "+mov esi, 0x20",
-            "+call qword ptr [rcx + <target>]",
+            "+call qword ptr [rcx + 0x38]",
             "+mov ebp, eax",
             "+lea rdi, [rsp + 8]",
             "+call <target>",
@@ -3172,7 +3743,7 @@
             " ret ",
             "-mov rax, qword ptr [r12]",
             "-mov rdi, r12",
-            "-call qword ptr [rax + <target>]",
+            "-call qword ptr [rax + 0x10]",
             "-mov rdi, r12",
             "+jmp <target>",
             "+mov r14, rax",
@@ -3497,7 +4068,7 @@
             "-mov rdi, r12",
             "+mov rax, qword ptr [r13]",
             "+mov rdi, r13",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0xe0]",
             " cmp rax, 0x40000",
             " je <target>",
             "-mov rax, qword ptr [rsp + 0x10]",
@@ -3648,7 +4219,7 @@
             "je <target>",
             "mov rdi, qword ptr [rax + 0xb0]",
             "mov rax, qword ptr [rdi]",
-            "call qword ptr [rax + <target>]"
+            "call qword ptr [rax + 0x18]"
           ],
           "instruction_diff": [
             "--- 1.26.52\n",
@@ -3697,7 +4268,7 @@
             "+je <target>",
             "+mov rdi, qword ptr [rax + 0xb0]",
             "+mov rax, qword ptr [rdi]",
-            "+call qword ptr [rax + <target>]",
+            "+call qword ptr [rax + 0x18]",
             "+mov r15d, eax",
             "+jmp <target>",
             "+xor r15d, r15d",
@@ -3805,7 +4376,7 @@
         },
         {
           "address": "0xcf38e30",
-          "similarity": 0.06245,
+          "similarity": 0.0556,
           "size": 14760,
           "evidence": [
             "ambiguous_old_pattern"
@@ -3865,8 +4436,8 @@
           "similarity": 0.44167,
           "size": 8326,
           "evidence": [
-            "self_rtti:29NetworkItemInstanceDescriptor",
-            "self_rtti:14ItemDescriptor"
+            "self_rtti:14ItemDescriptor",
+            "self_rtti:29NetworkItemInstanceDescriptor"
           ],
           "head": [
             "push rbp",
@@ -3971,7 +4542,7 @@
             " mov rax, qword ptr [r14]",
             " mov rdi, r14",
             "@@ -65,16 +46,17 @@\n",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x40]",
             " movups xmm0, xmmword ptr [rax]",
             "-movaps xmmword ptr [rsp + 0x10], xmm0",
             "-mov ebp, dword ptr [r14 + 0x3c]",
@@ -4040,60 +4611,8 @@
           ]
         },
         {
-          "address": "0xc4de080",
-          "similarity": 0.11304,
-          "size": 1592,
-          "evidence": [
-            "self_rtti:14ItemDescriptor"
-          ],
-          "head": [
-            "push r15",
-            "push r14",
-            "push rbx",
-            "sub rsp, 0x20",
-            "mov r14, rdi",
-            "lea rdi, [rsp + 0x10]",
-            "call <target>",
-            "mov rax, qword ptr [r14]",
-            "xor ebx, ebx",
-            "mov rdi, r14",
-            "xor esi, esi",
-            "xor edx, edx",
-            "call qword ptr [rax + <target>]",
-            "mov r15, rax",
-            "mov rdi, qword ptr [rax + 8]",
-            "test rdi, rdi"
-          ]
-        },
-        {
-          "address": "0xbf8f860",
-          "similarity": 0.10868,
-          "size": 2198,
-          "evidence": [
-            "self_rtti:14ItemDescriptor"
-          ],
-          "head": [
-            "push rbp",
-            "push r15",
-            "push r14",
-            "push r13",
-            "push r12",
-            "push rbx",
-            "sub rsp, 0x1c8",
-            "mov rbx, rdi",
-            "mov rdi, qword ptr [rdi + 0x28]",
-            "mov rax, qword ptr [rdi]",
-            "call qword ptr [rax + <target>]",
-            "mov r14, rax",
-            "mov rax, qword ptr [rax + 8]",
-            "mov rdi, qword ptr [rax]",
-            "mov rax, qword ptr [rdi]",
-            "mov rsi, r14"
-          ]
-        },
-        {
           "address": "0xc6e4bd0",
-          "similarity": 0.10772,
+          "similarity": 0.1161,
           "size": 1927,
           "evidence": [
             "self_rtti:14ItemDescriptor"
@@ -4111,15 +4630,41 @@
             "mov rbx, rdi",
             "mov rax, qword ptr [rdx]",
             "mov rdi, rdx",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x30]",
             "test al, al",
             "je <target>",
             "mov qword ptr [rsp + 0x18], rbx"
           ]
         },
         {
+          "address": "0xc4de080",
+          "similarity": 0.10435,
+          "size": 1592,
+          "evidence": [
+            "self_rtti:14ItemDescriptor"
+          ],
+          "head": [
+            "push r15",
+            "push r14",
+            "push rbx",
+            "sub rsp, 0x20",
+            "mov r14, rdi",
+            "lea rdi, [rsp + 0x10]",
+            "call <target>",
+            "mov rax, qword ptr [r14]",
+            "xor ebx, ebx",
+            "mov rdi, r14",
+            "xor esi, esi",
+            "xor edx, edx",
+            "call qword ptr [rax + 0x20]",
+            "mov r15, rax",
+            "mov rdi, qword ptr [rax + 8]",
+            "test rdi, rdi"
+          ]
+        },
+        {
           "address": "0xca06280",
-          "similarity": 0.10333,
+          "similarity": 0.10167,
           "size": 9045,
           "evidence": [
             "self_rtti:14ItemDescriptor"
@@ -4141,6 +4686,32 @@
             "je <target>",
             "mov al, 6",
             "cmp ecx, 0xc"
+          ]
+        },
+        {
+          "address": "0xc5a1ce0",
+          "similarity": 0.09085,
+          "size": 1787,
+          "evidence": [
+            "self_rtti:14ItemDescriptor"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r13",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x48",
+            "mov r13, rdx",
+            "mov r14, rsi",
+            "cmp byte ptr [rsi + 0x24], 2",
+            "je <target>",
+            "mov r14, qword ptr [r14]",
+            "cmp edi, 4",
+            "ja <target>",
+            "mov eax, edi",
+            "lea rcx, [rip <target>]"
           ]
         }
       ],
@@ -4225,7 +4796,7 @@
             "+mov rbx, rcx",
             "+mov rax, qword ptr [rcx]",
             "+mov rdi, rcx",
-            "+call qword ptr [rax + <target>]",
+            "+call qword ptr [rax + 0x30]",
             " xorps xmm1, xmm1",
             "-cmp byte ptr [rdi + 0x23], 1",
             "-jne <target>",
@@ -4345,13 +4916,13 @@
             "mov rbx, rsi",
             "mov rax, qword ptr [rsi]",
             "mov rdi, rsi",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x30]",
             "test al, al",
             "je <target>",
             "mov rax, qword ptr [rbx + 8]",
             "mov rdi, qword ptr [rax]",
             "mov rax, qword ptr [rdi]",
-            "call qword ptr [rax + <target>]"
+            "call qword ptr [rax + 0x50]"
           ]
         },
         {
@@ -4527,7 +5098,7 @@
             " mov rax, qword ptr [rip <target>]",
             "-mov rsi, rbp",
             "+mov rsi, rbx",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x10]",
             "-mov r13, rax",
             "+mov r15, rax",
             " test rax, rax",
@@ -4979,7 +5550,216 @@
         "mov r14, rsi",
         "call <target>"
       ],
-      "candidates": [],
+      "candidates": [
+        {
+          "address": "0xc9ec5e0",
+          "similarity": 0.39735,
+          "size": 173,
+          "evidence": [
+            "rtti_functor_slot:NSt3__110__function6__funcIZNK20InventoryTransaction18getExecuteFunctionERK15InventorySourceE3$_5F25InventoryTransactionErrorR6PlayerRK15InventoryActionEEE"
+          ],
+          "head": [
+            "push r15",
+            "push r14",
+            "push rbx",
+            "mov rbx, rdx",
+            "mov eax, dword ptr [rdx + 0xc]",
+            "test eax, eax",
+            "je <target>",
+            "cmp eax, 1",
+            "je <target>",
+            "jmp <target>",
+            "mov r15, rsi",
+            "lea rdi, [rbx + 0xb0]",
+            "mov rax, qword ptr [rbx + 0xb0]",
+            "call qword ptr [rax + 0x30]",
+            "test al, al",
+            "jne <target>"
+          ],
+          "instruction_diff": [
+            "--- 1.26.52\n",
+            "+++ 1.26.60\n",
+            "@@ -2,4 +2,5 @@\n",
+            " push r14",
+            " push rbx",
+            "+mov rbx, rdx",
+            " mov eax, dword ptr [rdx + 0xc]",
+            " test eax, eax",
+            "@@ -8,43 +9,21 @@\n",
+            " je <target>",
+            " jmp <target>",
+            "-cmp byte ptr [rdx + 0xd3], 1",
+            "-jne <target>",
+            "-mov rax, qword ptr [rdx + 0xb8]",
+            "-test rax, rax",
+            "-je <target>",
+            "-cmp qword ptr [rax], 0",
+            "-je <target>",
+            "-lea rdi, [rdx + 0xb0]",
+            "-mov rbx, rdx",
+            "-mov r14, rsi",
+            "-call <target>",
+            "-mov rsi, r14",
+            "-mov rdx, rbx",
+            "+mov r15, rsi",
+            "+lea rdi, [rbx + 0xb0]",
+            "+mov rax, qword ptr [rbx + 0xb0]",
+            "+call qword ptr [rax + 0x30]",
+            " test al, al",
+            " jne <target>",
+            "-cmp byte ptr [rdx + 0xd2], 0",
+            "-jne <target>",
+            "-cmp byte ptr [rdx + 0x16b], 1",
+            "-jne <target>",
+            "-mov rax, qword ptr [rdx + 0x150]",
+            "-test rax, rax",
+            "+lea r14, [rbx + 0x148]",
+            "+mov rax, qword ptr [rbx + 0x148]",
+            "+mov rdi, r14",
+            "+call qword ptr [rax + 0x30]",
+            "+test al, al",
+            " je <target>",
+            "-cmp qword ptr [rax], 0",
+            "-je <target>",
+            "-lea rbx, [rdx + 0x148]",
+            "-mov rdi, rbx",
+            "-mov r14, rdx",
+            "-mov r15, rsi",
+            "-call <target>",
+            "-mov rdx, r14",
+            "-test al, al",
+            "-jne <target>",
+            "-cmp byte ptr [rdx + 0x16a], 0",
+            "-je <target>",
+            "+mov edx, dword ptr [rbx + 8]",
+            "+and edx, 1",
+            " mov rdi, r15",
+            "-mov edx, dword ptr [rdx + 8]",
+            "-and edx, 1",
+            " mov rax, qword ptr [r15]",
+            "-mov rsi, rbx",
+            "+mov rsi, r14",
+            " call qword ptr [rax + 0x3a0]",
+            " mov eax, 1",
+            "@@ -53,36 +32,19 @@\n",
+            " pop r15",
+            " ret ",
+            "-mov eax, dword ptr [rdx + 0xc]",
+            "+mov eax, dword ptr [rbx + 0xc]",
+            " cmp eax, 1",
+            " jne <target>",
+            "-cmp byte ptr [rdx + 0xd3], 1",
+            "-jne <target>",
+            "-mov rax, qword ptr [rdx + 0xb8]",
+            "-test rax, rax",
+            "+lea rdi, [rbx + 0xb0]",
+            "+mov rax, qword ptr [rbx + 0xb0]",
+            "+call qword ptr [rax + 0x30]",
+            "+test al, al",
+            " je <target>",
+            "-cmp qword ptr [rax], 0",
+            "-je <target>",
+            "-lea rdi, [rdx + 0xb0]",
+            "-mov rbx, rdx",
+            "-call <target>",
+            "-test al, al",
+            "-jne <target>",
+            "-mov rcx, rbx",
+            "-cmp byte ptr [rbx + 0xd2], 0",
+            "-je <target>",
+            "+mov rax, qword ptr [rbx + 0x148]",
+            "+add rbx, 0x148",
+            "+mov rdi, rbx",
+            "+call qword ptr [rax + 0x30]",
+            "+mov ecx, eax",
+            " mov eax, 1",
+            "-cmp byte ptr [rcx + 0x16b], 1",
+            "-jne <target>",
+            "-mov rdx, qword ptr [rcx + 0x150]",
+            "-test rdx, rdx",
+            "-je <target>",
+            "-cmp qword ptr [rdx], 0",
+            "-je <target>",
+            "-lea rdi, [rcx + 0x148]",
+            "-call <target>",
+            "-test al, al",
+            "-jne <target>",
+            "-cmp byte ptr [rbx + 0x16a], 0",
+            "-mov eax, 1",
+            "+test cl, cl",
+            " je <target>",
+            " xor eax, eax",
+            "@@ -91,7 +53,2 @@\n",
+            " pop r15",
+            " ret ",
+            "-mov eax, 1",
+            "-pop rbx",
+            "-pop r14",
+            "-pop r15",
+            "-ret "
+          ]
+        },
+        {
+          "address": "0xc9ec560",
+          "similarity": 0.10345,
+          "size": 68,
+          "evidence": [
+            "rtti_functor_slot:NSt3__110__function6__funcIZNK20InventoryTransaction18getExecuteFunctionERK15InventorySourceE3$_5F25InventoryTransactionErrorR6PlayerRK15InventoryActionEEE"
+          ],
+          "head": [
+            "push rbx",
+            "mov rax, qword ptr [rip <target>]",
+            "lea rdi, [rip <target>]",
+            "mov esi, 0x10",
+            "call qword ptr [rax + 0x10]",
+            "test rax, rax",
+            "je <target>",
+            "lea rcx, [rip <target>]",
+            "mov qword ptr [rax], rcx",
+            "pop rbx",
+            "ret ",
+            "mov edi, 0x10",
+            "mov rbx, rax",
+            "call <target>",
+            "mov rax, rbx",
+            "lea rcx, [rip <target>]"
+          ]
+        },
+        {
+          "address": "0xc9ec8e0",
+          "similarity": 0.02041,
+          "size": 1,
+          "evidence": [
+            "rtti_functor_slot:NSt3__110__function6__funcIZNK20InventoryTransaction18getExecuteFunctionERK15InventorySourceE3$_5F25InventoryTransactionErrorR6PlayerRK15InventoryActionEEE"
+          ],
+          "head": [
+            "ret "
+          ]
+        },
+        {
+          "address": "0xc9ec5c0",
+          "similarity": 0.02041,
+          "size": 1,
+          "evidence": [
+            "rtti_functor_slot:NSt3__110__function6__funcIZNK20InventoryTransaction18getExecuteFunctionERK15InventorySourceE3$_5F25InventoryTransactionErrorR6PlayerRK15InventoryActionEEE"
+          ],
+          "head": [
+            "ret "
+          ]
+        },
+        {
+          "address": "0xc9ec550",
+          "similarity": 0.0202,
+          "size": 10,
+          "evidence": [
+            "rtti_functor_slot:NSt3__110__function6__funcIZNK20InventoryTransaction18getExecuteFunctionERK15InventorySourceE3$_5F25InventoryTransactionErrorR6PlayerRK15InventoryActionEEE"
+          ],
+          "head": [
+            "mov esi, 0x10",
+            "jmp <target>"
+          ]
+        }
+      ],
       "manual_abi_review_required": true
     },
     {
@@ -5047,19 +5827,16 @@
             "+cmp byte ptr [r14 + 0x220], 0",
             " je <target>",
             " jmp <target>",
-            "@@ -75,68 +75,29 @@\n",
+            "@@ -75,5 +75,5 @@\n",
             " mov rcx, qword ptr [rdi]",
             " call qword ptr [rcx + rax]",
             "-cmp byte ptr [r14 + 0x218], 0",
-            "-jne <target>",
-            "-mov rax, qword ptr [r14]",
-            "-mov rdi, r14",
-            "-call qword ptr [rax + <target>]",
-            "-mov rdi, rax",
-            "-call <target>",
-            "-mov rax, qword ptr [r14]",
-            "-mov rdi, r14",
-            "-call qword ptr [rax + <target>]",
+            "+cmp byte ptr [r14 + 0x220], 0",
+            " jne <target>",
+            " mov rax, qword ptr [r14]",
+            "@@ -85,58 +85,19 @@\n",
+            " mov rdi, r14",
+            " call qword ptr [rax + 0xc98]",
             "-mov r15, rax",
             "-cmp qword ptr [rax + 8], 0",
             "-jne <target>",
@@ -5074,16 +5851,6 @@
             "-je <target>",
             "-mov dword ptr [0], 0xdeadc0de",
             "-mov rax, qword ptr [r15 + 8]",
-            "+cmp byte ptr [r14 + 0x220], 0",
-            "+jne <target>",
-            "+mov rax, qword ptr [r14]",
-            "+mov rdi, r14",
-            "+call qword ptr [rax + <target>]",
-            "+mov rdi, rax",
-            "+call <target>",
-            "+mov rax, qword ptr [r14]",
-            "+mov rdi, r14",
-            "+call qword ptr [rax + <target>]",
             "+mov rcx, qword ptr [rax + 8]",
             "+test rcx, rcx",
             "+je <target>",
@@ -5187,7 +5954,20 @@
             "+mov rsi, qword ptr [r14 + 0x48]",
             "+mov rcx, qword ptr [rsi + 0x10]",
             "+mov rax, qword ptr [rax + 0x2f0]",
-            "+mov qword ptr [rcx], rax"
+            "+mov qword ptr [rcx], rax",
+            " mov r14, qword ptr [rsp + 8]",
+            " test r14, r14",
+            "@@ -284,4 +246,5 @@\n",
+            " call <target>",
+            " jmp <target>",
+            "+jmp <target>",
+            " mov rbx, rax",
+            " mov rdi, qword ptr [rsp + 0x20]",
+            "@@ -311,5 +274,4 @@\n",
+            " mov rdi, rbx",
+            " call <target>",
+            "-jmp <target>",
+            " mov rbx, rax"
           ]
         },
         {
@@ -5245,7 +6025,7 @@
         },
         {
           "address": "0xce2be10",
-          "similarity": 0.19545,
+          "similarity": 0.21364,
           "size": 462,
           "evidence": [
             "vtable:Level:old_slots=[120]:new_slot=4",
@@ -5267,12 +6047,12 @@
             "mov qword ptr [rsp + 0x50], r14",
             "mov rax, qword ptr [rdi]",
             "mov rsi, r14",
-            "call qword ptr [rax + <target>]"
+            "call qword ptr [rax + 0x48]"
           ]
         },
         {
           "address": "0xce390c0",
-          "similarity": 0.19501,
+          "similarity": 0.18594,
           "size": 521,
           "evidence": [
             "vtable:Level:old_slots=[120]:new_slot=176",
@@ -5323,7 +6103,7 @@
         "mov rax, qword ptr [rip <target>]",
         "lea rdi, [rip <target>]",
         "mov esi, 0xb8",
-        "call qword ptr [rax + <target>]",
+        "call qword ptr [rax + 0x10]",
         "mov r12, rax",
         "test rax, rax"
       ],
@@ -5352,7 +6132,7 @@
             "mov rax, qword ptr [rip <target>]",
             "lea rdi, [rip <target>]",
             "mov esi, 0xb8",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x10]",
             "mov r12, rax"
           ],
           "instruction_diff": [
@@ -5399,7 +6179,7 @@
             "-mov rax, qword ptr [rdi]",
             "-lea rsi, [rsp + 8]",
             "-mov rdx, rbx",
-            "-call qword ptr [rax + <target>]",
+            "-call qword ptr [rax + 0x58]",
             "-test eax, eax",
             "-jne <target>",
             "-mov rax, qword ptr [r15 + 0x180]",
@@ -5409,7 +6189,7 @@
             "-mov rax, qword ptr [rdi]",
             "-lea rsi, [rsp + 8]",
             "-mov rdx, rbx",
-            "-call qword ptr [rax + <target>]",
+            "-call qword ptr [rax + 0x58]",
             "-test eax, eax",
             "-jne <target>",
             "-mov rax, qword ptr [r15 + 0x188]",
@@ -5419,7 +6199,7 @@
             "-mov rax, qword ptr [rdi]",
             "-lea rsi, [rsp + 8]",
             "-mov rdx, rbx",
-            "-call qword ptr [rax + <target>]",
+            "-call qword ptr [rax + 0x58]",
             "-test eax, eax",
             "-jne <target>",
             "-mov rax, qword ptr [r15 + 0x190]",
@@ -5435,7 +6215,7 @@
             "+mov rax, qword ptr [rdi]",
             "+lea rsi, [rsp + 0x10]",
             "+mov rdx, rbx",
-            "+call qword ptr [rax + <target>]",
+            "+call qword ptr [rax + 0x58]",
             "+test eax, eax",
             "+jne <target>",
             "+mov rax, qword ptr [r15 + 0x1a8]",
@@ -5445,7 +6225,7 @@
             "+mov rax, qword ptr [rdi]",
             "+lea rsi, [rsp + 0x10]",
             "+mov rdx, rbx",
-            "+call qword ptr [rax + <target>]",
+            "+call qword ptr [rax + 0x58]",
             "+test eax, eax",
             "+jne <target>",
             "+mov rax, qword ptr [r15 + 0x1b0]",
@@ -5455,7 +6235,7 @@
             "+mov rax, qword ptr [rdi]",
             "+lea rsi, [rsp + 0x10]",
             "+mov rdx, rbx",
-            "+call qword ptr [rax + <target>]",
+            "+call qword ptr [rax + 0x58]",
             "+test eax, eax",
             "+jne <target>",
             "+mov rax, qword ptr [r15 + 0x1b8]",
@@ -5465,7 +6245,7 @@
             "+mov rax, qword ptr [rdi]",
             "+lea rsi, [rsp + 0x10]",
             " mov rdx, rbx",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x58]",
             "@@ -74,5 +71,5 @@\n",
             " cmp r12, 3",
             " ja <target>",
@@ -5475,7 +6255,7 @@
             " je <target>",
             "@@ -88,5 +85,5 @@\n",
             " mov r8d, ebp",
-            " call qword ptr [r9 + <target>]",
+            " call qword ptr [r9 + 0x30]",
             "-mov rax, qword ptr [r15 + 0x170]",
             "+mov rax, qword ptr [r15 + 0x198]",
             " test byte ptr [rax], 1",
@@ -5716,12 +6496,12 @@
             " mov rdi, qword ptr [rax]",
             " mov rax, qword ptr [rdi]",
             " mov rsi, r14",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x18]",
             "-mov qword ptr [rsp + 0x38], r15",
             "-mov rdi, qword ptr [r15]",
             "+mov rdi, qword ptr [r12]",
             " mov rax, qword ptr [rdi]",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x30]",
             "-lea r13, [rbx + 0xe0]",
             "-mov rbp, qword ptr [rbx + 0xf8]",
             "-lea r15, [rbx + 0x1c0]",
@@ -5746,7 +6526,7 @@
         },
         {
           "address": "0x8d229a0",
-          "similarity": 0.40313,
+          "similarity": 0.4,
           "size": 1455,
           "evidence": [
             "vtable:NetworkSystem:old_slots=[2]:new_slot=3"
@@ -5823,29 +6603,29 @@
           ]
         },
         {
-          "address": "0x8d23140",
-          "similarity": 0.15711,
-          "size": 619,
+          "address": "0x8d1e580",
+          "similarity": 0.15686,
+          "size": 286,
           "evidence": [
-            "vtable:NetworkSystem:old_slots=[2]:new_slot=8"
+            "vtable:NetworkSystem:old_slots=[2]:new_slot=13"
           ],
           "head": [
-            "push rbp",
-            "push r15",
             "push r14",
-            "push r13",
-            "push r12",
             "push rbx",
-            "sub rsp, 0x38",
-            "mov r15, rcx",
-            "mov rbx, rdx",
-            "mov r14, rsi",
-            "mov r12, rdi",
-            "mov rax, qword ptr [rdi + 0x1a0]",
-            "test rax, rax",
+            "sub rsp, 0x18",
+            "cmp dword ptr [rdi + 0x18], 0",
             "je <target>",
-            "mov r13, qword ptr [rax]",
-            "mov rdi, qword ptr [r15 + 0x20]"
+            "add rsp, 0x18",
+            "pop rbx",
+            "pop r14",
+            "ret ",
+            "mov rbx, qword ptr [rdi + 0xe0]",
+            "mov rax, qword ptr [rbx]",
+            "mov r14, rdi",
+            "mov rdi, rbx",
+            "call qword ptr [rax + 0x10]",
+            "mov dword ptr [rbx + 8], 1",
+            "mov r14, qword ptr [r14 + 0xd8]"
           ]
         }
       ],
@@ -5872,16 +6652,16 @@
         "mov rax, qword ptr [r13]",
         "mov rdi, r13",
         "mov rsi, r14",
-        "call qword ptr [rax + <target>]",
+        "call qword ptr [rax + 0x208]",
         "mov rax, qword ptr [r14]",
         "mov rdi, r14",
         "mov rsi, r13",
-        "call qword ptr [rax + <target>]"
+        "call qword ptr [rax + 0x218]"
       ],
       "candidates": [
         {
           "address": "0xd3d5f00",
-          "similarity": 0.62,
+          "similarity": 0.6175,
           "size": 5401,
           "evidence": [
             "vtable:PistonBlockActor:old_slots=[43]:new_slot=43"
@@ -5902,7 +6682,7 @@
             "mov rax, qword ptr [r14]",
             "mov rdi, r14",
             "mov rsi, rbx",
-            "call qword ptr [rax + <target>]"
+            "call qword ptr [rax + 0x208]"
           ],
           "instruction_diff": [
             "--- 1.26.52\n",
@@ -5927,15 +6707,15 @@
             "+mov rax, qword ptr [r14]",
             "+mov rdi, r14",
             "+mov rsi, rbx",
-            "+call qword ptr [rax + <target>]",
+            "+call qword ptr [rax + 0x208]",
             "+mov rax, qword ptr [rbx]",
             "+mov rdi, rbx",
             " mov rsi, r14",
-            " call qword ptr [rax + <target>]",
+            "-call qword ptr [rax + 0x208]",
             "-mov rax, qword ptr [r14]",
             "-mov rdi, r14",
             "-mov rsi, r13",
-            "-call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x218]",
             "-and byte ptr [r14 + 0x4c], 0xfe",
             "-cmp byte ptr [r14 + 0xea], 1",
             "+and byte ptr [rbx + 0x54], 0xfe",
@@ -5951,7 +6731,7 @@
             "+lea rsi, [rbx + 8]",
             "+mov rax, qword ptr [r14]",
             "+mov rdi, r14",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x10]",
             " mov rcx, qword ptr [rip <target>]",
             " mov rsi, qword ptr [rax + 0x68]",
             " movzx edx, word ptr [rax + 0x128]",
@@ -6027,10 +6807,9 @@
             "+mov rax, qword ptr [r14]",
             " lea rsi, [rsp + 0x18]",
             "-mov rdi, r13",
-            "-call qword ptr [rax + <target>]",
-            "-cmp byte ptr [r14 + 0xd8], 1",
             "+mov rdi, r14",
-            "+call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x10]",
+            "-cmp byte ptr [r14 + 0xd8], 1",
             "+cmp byte ptr [rbx + 0xe0], 1",
             " jne <target>",
             " mov rax, qword ptr [rax + 0x68]",
@@ -6054,12 +6833,13 @@
             "+xor ecx, ecx",
             "+call <target>",
             "+test rax, rax",
-            "+je <target>"
+            "+je <target>",
+            "+mov r12, qword ptr [rax + 0x200]"
           ]
         },
         {
           "address": "0xd3d49e0",
-          "similarity": 0.08892,
+          "similarity": 0.08601,
           "size": 614,
           "evidence": [
             "vtable:PistonBlockActor:old_slots=[43]:new_slot=20"
@@ -6080,38 +6860,12 @@
             "movzx r12d, byte ptr [rdi + 0xef]",
             "mov rax, qword ptr [rdx]",
             "mov rdi, rdx",
-            "call qword ptr [rax + <target>]"
-          ]
-        },
-        {
-          "address": "0xd3d2ca0",
-          "similarity": 0.0874,
-          "size": 3170,
-          "evidence": [
-            "vtable:PistonBlockActor:old_slots=[43]:new_slot=2"
-          ],
-          "head": [
-            "push rbp",
-            "push r15",
-            "push r14",
-            "push r13",
-            "push r12",
-            "push rbx",
-            "sub rsp, 0x88",
-            "mov rbx, rdx",
-            "mov r12, rdi",
-            "mov qword ptr [rsp + 0x68], rsi",
-            "mov qword ptr [rsp + 0x78], rcx",
-            "call <target>",
-            "mov r13, qword ptr [rbx + 0x10]",
-            "add rbx, 0x10",
-            "mov qword ptr [rsp + 8], rbx",
-            "test r13, r13"
+            "call qword ptr [rax + 0x150]"
           ]
         },
         {
           "address": "0xd43eff0",
-          "similarity": 0.06307,
+          "similarity": 0.06176,
           "size": 1308,
           "evidence": [
             "vtable:PistonBlockActor:old_slots=[43]:new_slot=18"
@@ -6132,12 +6886,12 @@
             "mov rdi, rcx",
             "mov rsi, rdx",
             "mov r15, rdx",
-            "call qword ptr [rax + <target>]"
+            "call qword ptr [rax + 0x10]"
           ]
         },
         {
           "address": "0xd3d4760",
-          "similarity": 0.05613,
+          "similarity": 0.05465,
           "size": 640,
           "evidence": [
             "vtable:PistonBlockActor:old_slots=[43]:new_slot=19"
@@ -6159,6 +6913,32 @@
             "movups xmmword ptr [rsp + 0x48], xmm0",
             "mov qword ptr [rsp + 0x40], r12",
             "lea rdi, [rip <target>]"
+          ]
+        },
+        {
+          "address": "0xd3d3910",
+          "similarity": 0.05159,
+          "size": 3363,
+          "evidence": [
+            "vtable:PistonBlockActor:old_slots=[43]:new_slot=3"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r13",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x158",
+            "mov r13, rsi",
+            "mov r12, rdi",
+            "call <target>",
+            "test al, al",
+            "je <target>",
+            "mov byte ptr [rsp + 0x17], al",
+            "mov byte ptr [rsp + 0x128], 0x12",
+            "movabs rax, 0x6c6261766f4d7369",
+            "mov qword ptr [rsp + 0x129], rax"
           ]
         }
       ],
@@ -6194,20 +6974,20 @@
       "candidates": [
         {
           "address": "0x9d7c910",
-          "similarity": 0.65167,
+          "similarity": 0.64333,
           "size": 9058,
           "evidence": [
             "vtable:RepositoryFactory:old_slots=[2]:new_slot=2",
-            "self_string:behavior_packs",
-            "self_string:skin_packs",
             "self_rtti:NSt3__120__shared_ptr_emplaceI17RepositorySourcesNS_9allocatorIS1_EEEE",
-            "self_string:behavior",
-            "self_string:resource",
-            "self_string:premiumcache",
-            "self_string:system_behavior_packs",
-            "self_string:system_resource_packs",
+            "self_string:packcache",
             "self_string:resource_packs",
-            "self_string:packcache"
+            "self_string:skin_packs",
+            "self_string:resource",
+            "self_string:behavior",
+            "self_string:system_resource_packs",
+            "self_string:system_behavior_packs",
+            "self_string:premiumcache",
+            "self_string:behavior_packs"
           ],
           "head": [
             "push rbp",
@@ -6382,11 +7162,11 @@
         },
         {
           "address": "0x9d4b870",
-          "similarity": 0.10167,
+          "similarity": 0.10083,
           "size": 6037,
           "evidence": [
-            "self_string:behavior_packs",
-            "self_string:resource_packs"
+            "self_string:resource_packs",
+            "self_string:behavior_packs"
           ],
           "head": [
             "push rbp",
@@ -6412,8 +7192,8 @@
           "similarity": 0.09583,
           "size": 7621,
           "evidence": [
-            "self_string:behavior_packs",
-            "self_string:resource_packs"
+            "self_string:resource_packs",
+            "self_string:behavior_packs"
           ],
           "head": [
             "push rbp",
@@ -6439,8 +7219,8 @@
           "similarity": 0.09348,
           "size": 1928,
           "evidence": [
-            "self_string:behavior_packs",
-            "self_string:resource_packs"
+            "self_string:resource_packs",
+            "self_string:behavior_packs"
           ],
           "head": [
             "push r15",
@@ -6463,11 +7243,11 @@
         },
         {
           "address": "0xb55d9a0",
-          "similarity": 0.07333,
+          "similarity": 0.07917,
           "size": 12169,
           "evidence": [
-            "self_string:behavior",
-            "self_string:resource"
+            "self_string:resource",
+            "self_string:behavior"
           ],
           "head": [
             "push rbp",
@@ -6521,7 +7301,7 @@
       "candidates": [
         {
           "address": "0xbbac7d0",
-          "similarity": 0.97492,
+          "similarity": 0.97335,
           "size": 3125,
           "evidence": [
             "ambiguous_old_pattern",
@@ -6617,6 +7397,13 @@
             "+nop word ptr cs:[rax + rax]",
             " add r15, -0x18",
             " cmp r15, rbp",
+            "@@ -393,5 +395,5 @@\n",
+            " mov rdi, rax",
+            " mov rsi, rbx",
+            "-call qword ptr [rcx + 0x740]",
+            "+call qword ptr [rcx + 0x758]",
+            " lea rax, [rip <target>]",
+            " mov qword ptr [rsp + 0xd0], rax",
             "@@ -456,9 +458,7 @@\n",
             " ret ",
             " mov edi, 0x30",
@@ -6657,7 +7444,7 @@
         },
         {
           "address": "0xbd00f90",
-          "similarity": 0.16639,
+          "similarity": 0.16474,
           "size": 2702,
           "evidence": [
             "self_rtti:10TextPacket"
@@ -6675,41 +7462,41 @@
             "mov r14, rdi",
             "mov rax, qword ptr [rdx]",
             "mov rdi, rdx",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x90]",
             "mov r12, rax",
             "mov rax, qword ptr [r15]",
             "mov rdi, r15"
           ]
         },
         {
-          "address": "0x7508c20",
-          "similarity": 0.16166,
-          "size": 1031,
+          "address": "0xa155690",
+          "similarity": 0.15748,
+          "size": 1085,
           "evidence": [
             "self_rtti:10TextPacket"
           ],
           "head": [
-            "push rbp",
             "push r15",
             "push r14",
-            "push r13",
             "push r12",
             "push rbx",
-            "sub rsp, 0x178",
-            "mov r12, rdx",
-            "mov r15, rsi",
-            "xorps xmm0, xmm0",
-            "movaps xmmword ptr [rsp + 0x30], xmm0",
-            "mov qword ptr [rsp + 0x40], 0",
-            "movzx ecx, byte ptr [rsi]",
-            "test cl, 1",
-            "je <target>",
-            "mov rax, qword ptr [r15 + 8]"
+            "sub rsp, 0x128",
+            "mov rcx, qword ptr [rdi + 0x10]",
+            "mov eax, dword ptr [rdi + 0x18]",
+            "mov edx, dword ptr [rcx + 0x40]",
+            "mov r8, qword ptr [rcx + 0x38]",
+            "sub edx, r8d",
+            "shr edx, 3",
+            "dec edx",
+            "and edx, 0xb845379",
+            "lea rdx, [r8 + rdx*8]",
+            "mov r8, qword ptr [rcx + 0x50]",
+            "nop word ptr cs:[rax + rax]"
           ]
         },
         {
           "address": "0xb565510",
-          "similarity": 0.1581,
+          "similarity": 0.15547,
           "size": 510,
           "evidence": [
             "self_rtti:10TextPacket"
@@ -6755,7 +7542,7 @@
         "mov rax, qword ptr [rip <target>]",
         "lea rdi, [rip <target>]",
         "mov esi, 0x108",
-        "call qword ptr [rax + <target>]",
+        "call qword ptr [rax + 0x10]",
         "mov rbx, rax",
         "test rax, rax",
         "je <target>",
@@ -6769,32 +7556,32 @@
           "similarity": 0.51667,
           "size": 31488,
           "evidence": [
-            "self_rtti:33SelfRegisteringContentLogEndPointI20WorldSessionEndPointE",
-            "self_rtti:19DebuggerDiagnostics",
-            "self_string:9b2ee940-33c4-4894-8b81-9ae65dc8353c",
-            "self_rtti:21ServerPerformanceData",
-            "self_rtti:N7Bedrock6PubSub9PublisherIFvvENS0_11ThreadModel14SingleThreadedELNS0_16ReturnPolicyTypeE0EEE",
-            "self_string:,FinalLevelStorageState",
-            "self_rtti:NSt3__120__shared_ptr_emplaceIN7Bedrock24EnableNonOwnerReferences12ControlBlockENS_9allocatorIS3_EEEE",
-            "self_string:{:08x}-{:04x}-{:04x}-{:04x}-{:08x}{:04x}",
-            "self_rtti:NSt3__120__shared_ptr_pointerIP19ServerNetworkSystemNS_14default_deleteIS1_EENS_9allocatorIS1_EEEE",
-            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE",
-            "self_rtti:N7Bedrock6PubSub9PublisherIFvmRNSt3__16vectorI12DebuggerStatNS2_9allocatorIS4_EEEEENS0_11ThreadModel14SingleThreadedELNS0_16ReturnPolicyTypeE0EEE",
-            "self_rtti:20LoopbackPacketSender",
-            "self_string:initializeServer",
-            "self_string:\"PackSourceLoading",
-            "self_string:ServerInstance::initializeServer - FinalStateCheck",
-            "self_string:,EntityRegistryCreation",
-            "self_rtti:N7Bedrock6PubSub9PublisherIFvbENS0_11ThreadModel14SingleThreadedELNS0_16ReturnPolicyTypeE0EEE",
-            "self_string:Scripting has been DISABLED",
             "self_string:world_resource_packs.json",
-            "self_string:operator()",
-            "self_string:Pack Stack - [{:02}] {} (id: {}, version: {}) @ {}",
-            "self_string:(LevelStorageCreation",
-            "self_string:world_behavior_packs.json",
-            "self_rtti:17ResourcePackStack",
+            "self_string:Scripting has been DISABLED",
+            "self_rtti:N7Bedrock6PubSub9PublisherIFvvENS0_11ThreadModel14SingleThreadedELNS0_16ReturnPolicyTypeE0EEE",
+            "self_string:9b2ee940-33c4-4894-8b81-9ae65dc8353c",
+            "self_string:,EntityRegistryCreation",
+            "self_string:\"PackSourceLoading",
             "self_string:Pack Stack - None",
             "self_string:ServerInstance Thread",
+            "self_string:{:08x}-{:04x}-{:04x}-{:04x}-{:08x}{:04x}",
+            "self_rtti:N7Bedrock6PubSub9PublisherIFvmRNSt3__16vectorI12DebuggerStatNS2_9allocatorIS4_EEEEENS0_11ThreadModel14SingleThreadedELNS0_16ReturnPolicyTypeE0EEE",
+            "self_string:ServerInstance::initializeServer - FinalStateCheck",
+            "self_rtti:N7Bedrock6PubSub9PublisherIFvbENS0_11ThreadModel14SingleThreadedELNS0_16ReturnPolicyTypeE0EEE",
+            "self_string:initializeServer",
+            "self_rtti:19DebuggerDiagnostics",
+            "self_rtti:NSt3__120__shared_ptr_emplaceIN7Bedrock24EnableNonOwnerReferences12ControlBlockENS_9allocatorIS3_EEEE",
+            "self_rtti:21ServerPerformanceData",
+            "self_rtti:17ResourcePackStack",
+            "self_rtti:NSt3__120__shared_ptr_pointerIP19ServerNetworkSystemNS_14default_deleteIS1_EENS_9allocatorIS1_EEEE",
+            "self_string:world_behavior_packs.json",
+            "self_rtti:33SelfRegisteringContentLogEndPointI20WorldSessionEndPointE",
+            "self_string:operator()",
+            "self_string:(LevelStorageCreation",
+            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE",
+            "self_rtti:20LoopbackPacketSender",
+            "self_string:Pack Stack - [{:02}] {} (id: {}, version: {}) @ {}",
+            "self_string:,FinalLevelStorageState",
             "callgraph:old_caller=0x4819a40:new_caller=0x49d2e60"
           ],
           "head": [
@@ -6828,7 +7615,7 @@
             "-mov rax, qword ptr [rip <target>]",
             "-lea rdi, [rip <target>]",
             "-mov esi, 0x108",
-            "-call qword ptr [rax + <target>]",
+            "-call qword ptr [rax + 0x10]",
             "-mov rbx, rax",
             "-test rax, rax",
             "-je <target>",
@@ -6884,7 +7671,7 @@
             "-lea rdi, [rip <target>]",
             "-mov rax, qword ptr [rip <target>]",
             "-mov esi, 0x68",
-            "-call qword ptr [rax + <target>]",
+            "-call qword ptr [rax + 0x10]",
             "-mov r13, rax",
             "-test rax, rax",
             "-je <target>",
@@ -6970,7 +7757,7 @@
         },
         {
           "address": "0x6eb4830",
-          "similarity": 0.20583,
+          "similarity": 0.20667,
           "size": 6085,
           "evidence": [
             "self_rtti:NSt3__120__shared_ptr_emplaceIN7Bedrock24EnableNonOwnerReferences12ControlBlockENS_9allocatorIS3_EEEE",
@@ -6998,7 +7785,7 @@
         },
         {
           "address": "0xdc88c70",
-          "similarity": 0.17927,
+          "similarity": 0.18031,
           "size": 3737,
           "evidence": [
             "self_rtti:NSt3__120__shared_ptr_emplaceIN7Bedrock24EnableNonOwnerReferences12ControlBlockENS_9allocatorIS3_EEEE",
@@ -7020,7 +7807,7 @@
             "mov rax, qword ptr [rip <target>]",
             "lea rdi, [rip <target>]",
             "mov esi, 0x20",
-            "call qword ptr [rax + <target>]"
+            "call qword ptr [rax + 0x10]"
           ]
         },
         {
@@ -7029,8 +7816,8 @@
           "size": 64595,
           "evidence": [
             "self_rtti:NSt3__120__shared_ptr_emplaceIN7Bedrock24EnableNonOwnerReferences12ControlBlockENS_9allocatorIS3_EEEE",
-            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE",
             "self_rtti:17ResourcePackStack",
+            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE",
             "self_string:Main Thread"
           ],
           "head": [
@@ -7054,7 +7841,7 @@
         },
         {
           "address": "0x61fc540",
-          "similarity": 0.15846,
+          "similarity": 0.15752,
           "size": 4233,
           "evidence": [
             "self_rtti:NSt3__120__shared_ptr_emplaceIN7Bedrock24EnableNonOwnerReferences12ControlBlockENS_9allocatorIS3_EEEE",
@@ -7075,7 +7862,7 @@
             "mov rax, qword ptr [rip <target>]",
             "lea rdi, [rip <target>]",
             "mov esi, 0x20",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x10]",
             "test rax, rax"
           ]
         }
@@ -7116,8 +7903,8 @@
           "size": 1939,
           "evidence": [
             "string:minecraft:player.0",
-            "self_string:minecraft:player.0",
             "self_rtti:NSt3__120__shared_ptr_emplaceIN7Bedrock11Application11ThreadOwnerI18SerializedSkinImplLNS2_19ThreadOwnerBehaviorE0EEENS_9allocatorIS6_EEEE",
+            "self_string:minecraft:player.0",
             "callgraph:old_caller=0x59abe10:new_caller=0x5b548a0"
           ],
           "head": [
@@ -7201,7 +7988,7 @@
             "+mov rax, qword ptr [r13]",
             "+mov rdi, r13",
             " mov edx, 1",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x1f8]",
             " test rax, rax",
             " je <target>",
             "-cmp qword ptr [r13 + 0x88], 0",
@@ -7238,7 +8025,7 @@
             "+mov dword ptr [0], 0xdeadc0de",
             "+mov rdi, qword ptr [r12 + 0x98]",
             " mov rax, qword ptr [rdi]",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x820]",
             "@@ -96,5 +57,5 @@\n",
             " lea rsi, [rdi + rsi*8]",
             " mov rdi, qword ptr [rdx + 0x50]",
@@ -7293,7 +8080,7 @@
         },
         {
           "address": "0x7ea4be0",
-          "similarity": 0.18878,
+          "similarity": 0.18605,
           "size": 980,
           "evidence": [
             "self_rtti:NSt3__120__shared_ptr_emplaceIN7Bedrock11Application11ThreadOwnerI18SerializedSkinImplLNS2_19ThreadOwnerBehaviorE0EEENS_9allocatorIS6_EEEE"
@@ -7370,29 +8157,29 @@
           ]
         },
         {
-          "address": "0xbcc6c60",
-          "similarity": 0.15595,
-          "size": 1066,
+          "address": "0xbd02d90",
+          "similarity": 0.15365,
+          "size": 1069,
           "evidence": [
-            "callgraph:old_caller=0x59abe10:new_caller=0x5b548a0"
+            "self_rtti:NSt3__120__shared_ptr_emplaceIN7Bedrock11Application11ThreadOwnerI18SerializedSkinImplLNS2_19ThreadOwnerBehaviorE0EEENS_9allocatorIS6_EEEE"
           ],
           "head": [
             "push rbp",
             "push r15",
             "push r14",
+            "push r13",
             "push r12",
             "push rbx",
-            "sub rsp, 0xe0",
+            "push rax",
+            "mov r14, rsi",
             "mov rbx, rdi",
-            "mov rax, qword ptr [rdi]",
-            "mov esi, 0x24",
-            "call qword ptr [rax + <target>]",
-            "mov rax, qword ptr [rbx + 0x158]",
-            "test rax, rax",
-            "je <target>",
-            "mov rdi, qword ptr [rax + 0x1f0]",
-            "test rdi, rdi",
-            "je <target>"
+            "mov rdi, rsi",
+            "call <target>",
+            "mov rax, qword ptr [rax]",
+            "mov qword ptr [rbx], rax",
+            "xorps xmm0, xmm0",
+            "movups xmmword ptr [rbx + 8], xmm0",
+            "lea rdi, [rbx + 0x18]"
           ]
         }
       ],
@@ -7418,17 +8205,17 @@
         "mov rax, qword ptr [rsi]",
         "mov rdi, rsi",
         "mov rsi, rdx",
-        "call qword ptr [rax + <target>]",
+        "call qword ptr [rax + 0x338]",
         "movzx edx, byte ptr [r12 + 0x10]",
         "mov rax, qword ptr [r14]",
         "mov rdi, r14",
         "mov rsi, r15",
-        "call qword ptr [rax + <target>]"
+        "call qword ptr [rax + 0x350]"
       ],
       "candidates": [
         {
           "address": "0x8cc3f30",
-          "similarity": 0.45008,
+          "similarity": 0.44755,
           "size": 6872,
           "evidence": [
             "string:realms",
@@ -7451,13 +8238,13 @@
             "mov rax, qword ptr [rsi]",
             "mov rdi, rsi",
             "mov rsi, rdx",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x358]",
             "movzx edx, byte ptr [rbx + 0x10]"
           ],
           "instruction_diff": [
             "--- 1.26.52\n",
             "+++ 1.26.60\n",
-            "@@ -5,14 +5,14 @@\n",
+            "@@ -5,24 +5,24 @@\n",
             " push r12",
             " push rbx",
             "-sub rsp, 0x538",
@@ -7471,18 +8258,23 @@
             " mov rax, qword ptr [rsi]",
             " mov rdi, rsi",
             " mov rsi, rdx",
-            " call qword ptr [rax + <target>]",
+            "-call qword ptr [rax + 0x338]",
             "-movzx edx, byte ptr [r12 + 0x10]",
+            "+call qword ptr [rax + 0x358]",
             "+movzx edx, byte ptr [rbx + 0x10]",
             " mov rax, qword ptr [r14]",
             " mov rdi, r14",
-            "@@ -21,8 +21,8 @@\n",
-            " test rax, rax",
-            " je <target>",
+            " mov rsi, r15",
+            "-call qword ptr [rax + 0x350]",
+            "-test rax, rax",
+            "-je <target>",
             "-mov byte ptr [rbx], 0",
             "-mov byte ptr [rbx + 0x128], 0",
             "-mov rax, rbx",
             "-add rsp, 0x538",
+            "+call qword ptr [rax + 0x370]",
+            "+test rax, rax",
+            "+je <target>",
             "+mov byte ptr [r12], 0",
             "+mov byte ptr [r12 + 0x128], 0",
             "+mov rax, r12",
@@ -7599,17 +8391,12 @@
             "-je <target>",
             "-mov rax, qword ptr [rsp + 0x3c0]",
             "-mov rcx, qword ptr [rsp + 0x3c8]",
-            "+cmp byte ptr [rsp + 0x27], 1",
-            "+jne <target>",
-            "+mov byte ptr [r12], 0",
-            "+mov byte ptr [r12 + 0x128], 0",
-            "+jmp <target>",
-            "+setl al"
+            "+cmp byte ptr [rsp + 0x27], 1"
           ]
         },
         {
           "address": "0x8cc9250",
-          "similarity": 0.20344,
+          "similarity": 0.20237,
           "size": 3335,
           "evidence": [
             "vtable:ServerNetworkHandler:old_slots=[104]:new_slot=80"
@@ -7635,7 +8422,7 @@
         },
         {
           "address": "0x6ee31a0",
-          "similarity": 0.14909,
+          "similarity": 0.14604,
           "size": 3937,
           "evidence": [
             "self_string:{:08x}-{:04x}-{:04x}-{:04x}-{:08x}{:04x}"
@@ -7687,7 +8474,7 @@
         },
         {
           "address": "0x9da8bb0",
-          "similarity": 0.12183,
+          "similarity": 0.11929,
           "size": 6748,
           "evidence": [
             "self_string:{:08x}-{:04x}-{:04x}-{:04x}-{:08x}{:04x}"
@@ -7827,7 +8614,7 @@
             "+mov dword ptr [0], 0xdeadc0de",
             "+mov rdi, qword ptr [r12 + 0x98]",
             " mov rax, qword ptr [rdi]",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x738]",
             "@@ -51,5 +33,5 @@\n",
             " xor ebp, ebp",
             " jmp <target>",
@@ -7881,7 +8668,7 @@
             "+mov dword ptr [0], 0xdeadc0de",
             "+mov rdi, qword ptr [r12 + 0x98]",
             " mov rax, qword ptr [rdi]",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x568]",
             "-mov r15, rax",
             "-cmp qword ptr [rbx + 0x88], 0",
             "-jne <target>",
@@ -7919,7 +8706,7 @@
             "+mov dword ptr [0], 0xdeadc0de",
             "+mov rdi, qword ptr [r12 + 0x98]",
             " mov rax, qword ptr [rdi]",
-            " call qword ptr [rax + <target>]"
+            " call qword ptr [rax + 0x568]"
           ]
         },
         {
@@ -8240,7 +9027,7 @@
         },
         {
           "address": "0x8cc1460",
-          "similarity": 0.14551,
+          "similarity": 0.14241,
           "size": 352,
           "evidence": [
             "self_rtti:16DisconnectPacket"
@@ -8266,7 +9053,7 @@
         },
         {
           "address": "0x8cd2e60",
-          "similarity": 0.13805,
+          "similarity": 0.13463,
           "size": 8550,
           "evidence": [
             "callgraph:old_caller=0x8923e20:new_caller=0x8ccf3b0"
@@ -8288,32 +9075,6 @@
             "mov rsi, qword ptr [rcx + 0x38]",
             "sub edx, esi",
             "shr edx, 3"
-          ]
-        },
-        {
-          "address": "0x87593a0",
-          "similarity": 0.12711,
-          "size": 905,
-          "evidence": [
-            "self_rtti:16DisconnectPacket"
-          ],
-          "head": [
-            "push rbp",
-            "push r15",
-            "push r14",
-            "push r13",
-            "push r12",
-            "push rbx",
-            "sub rsp, 0x28",
-            "mov rbx, r8",
-            "mov r14, rdx",
-            "cmp qword ptr [rdx + 0x38], 0",
-            "je <target>",
-            "mov r15, qword ptr [rbx]",
-            "mov ebp, dword ptr [r15 + 0x2ac]",
-            "cmp ebp, -1",
-            "je <target>",
-            "inc ebp"
           ]
         },
         {
@@ -8340,6 +9101,32 @@
             "je <target>",
             "mov rbx, rsi",
             "mov rdi, rsi"
+          ]
+        },
+        {
+          "address": "0x87593a0",
+          "similarity": 0.12451,
+          "size": 905,
+          "evidence": [
+            "self_rtti:16DisconnectPacket"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r13",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x28",
+            "mov rbx, r8",
+            "mov r14, rdx",
+            "cmp qword ptr [rdx + 0x38], 0",
+            "je <target>",
+            "mov r15, qword ptr [rbx]",
+            "mov ebp, dword ptr [r15 + 0x2ac]",
+            "cmp ebp, -1",
+            "je <target>",
+            "inc ebp"
           ]
         }
       ],
@@ -8378,21 +9165,21 @@
           "similarity": 0.3025,
           "size": 12196,
           "evidence": [
-            "self_string:IdentityType",
-            "self_string:ScoreboardId",
-            "self_string:ObjectiveName",
-            "self_string:DisplayObjectives",
-            "self_string:SortOrder",
-            "self_string:PlayerId",
-            "self_string:Objectives",
-            "self_string:LastUniqueID",
-            "self_rtti:16ServerScoreboard",
-            "self_string:DisplayName",
-            "self_string:RenderType",
             "self_string:EntityID",
-            "self_string:FakePlayerName",
+            "self_string:IdentityType",
+            "self_string:Objectives",
             "self_string:Criteria",
-            "self_string:ReadOnly"
+            "self_rtti:16ServerScoreboard",
+            "self_string:ScoreboardId",
+            "self_string:DisplayName",
+            "self_string:LastUniqueID",
+            "self_string:RenderType",
+            "self_string:ReadOnly",
+            "self_string:DisplayObjectives",
+            "self_string:PlayerId",
+            "self_string:SortOrder",
+            "self_string:FakePlayerName",
+            "self_string:ObjectiveName"
           ],
           "head": [
             "push rbp",
@@ -8531,7 +9318,7 @@
             "+lea rdi, [rsp + 0x38]",
             " lea rdx, [rsp + 0xb0]",
             " xor ecx, ecx",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x20]",
             "-mov r14, qword ptr [rsp + 0x70]",
             "+mov rdi, qword ptr [rsp + 0x38]",
             "+test rdi, rdi",
@@ -8567,7 +9354,7 @@
         },
         {
           "address": "0x7a9fc20",
-          "similarity": 0.08012,
+          "similarity": 0.07708,
           "size": 3883,
           "evidence": [
             "self_string:PlayerId"
@@ -8593,7 +9380,7 @@
         },
         {
           "address": "0xa0b3120",
-          "similarity": 0.0675,
+          "similarity": 0.075,
           "size": 7587,
           "evidence": [
             "self_string:PlayerId"
@@ -8622,8 +9409,8 @@
           "similarity": 0.06392,
           "size": 2453,
           "evidence": [
-            "self_string:ObjectiveName",
-            "self_string:SortOrder"
+            "self_string:SortOrder",
+            "self_string:ObjectiveName"
           ],
           "head": [
             "push rbp",
@@ -8700,7 +9487,187 @@
         "movups xmm0, xmmword ptr [r13]",
         "movaps xmmword ptr [rsp], xmm0"
       ],
-      "candidates": [],
+      "candidates": [
+        {
+          "address": "0xda7ccc0",
+          "similarity": 0.41203,
+          "size": 1889,
+          "evidence": [
+            "qualified_vtable:N9NetherNet16LanThreadManagerE:top=0:slot=17:thunk_resolved",
+            "qualified_vtable:N9NetherNet16LanThreadManagerE:top=-336:slot=6:thunk_resolved"
+          ],
+          "head": [
+            "push rbp",
+            "push r15",
+            "push r14",
+            "push r13",
+            "push r12",
+            "push rbx",
+            "sub rsp, 0x118",
+            "mov r13, rdx",
+            "mov r14, rsi",
+            "mov r12, rdi",
+            "lea rbx, [rsp + 0x150]",
+            "lea r15, [rdi + 0x40]",
+            "mov rdi, r15",
+            "call <target>",
+            "test al, al",
+            "je <target>"
+          ],
+          "instruction_diff": [
+            "--- 1.26.52\n",
+            "+++ 1.26.60\n",
+            "@@ -5,9 +5,9 @@\n",
+            " push r12",
+            " push rbx",
+            "-sub rsp, 0xf8",
+            "+sub rsp, 0x118",
+            " mov r13, rdx",
+            "-mov rbx, rsi",
+            "-mov r14, rdi",
+            "-lea rbp, [rsp + 0x130]",
+            "+mov r14, rsi",
+            "+mov r12, rdi",
+            "+lea rbx, [rsp + 0x150]",
+            " lea r15, [rdi + 0x40]",
+            " mov rdi, r15",
+            "@@ -25,19 +25,19 @@\n",
+            " test al, 1",
+            " je <target>",
+            "-mov r13, qword ptr [rsp + 8]",
+            "-jmp <target>",
+            "-mov qword ptr [rsp + 0x70], r14",
+            "-lea r12, [rsp + 0x78]",
+            "+mov rdi, qword ptr [rsp + 8]",
+            "+jmp <target>",
+            "+mov qword ptr [rsp + 0x90], r12",
+            "+lea r12, [rsp + 0x98]",
+            " mov rdi, r12",
+            "-mov rsi, rbx",
+            "-call <target>",
+            "-mov rax, qword ptr [rbp + 0x10]",
+            "-mov qword ptr [rsp + 0xd0], rax",
+            "-movups xmm0, xmmword ptr [rbp]",
+            "-movups xmmword ptr [rsp + 0xc0], xmm0",
+            "+mov rsi, r14",
+            "+call <target>",
+            "+mov rax, qword ptr [rbx + 0x10]",
+            "+mov qword ptr [rsp + 0xf0], rax",
+            "+movups xmm0, xmmword ptr [rbx]",
+            "+movups xmmword ptr [rsp + 0xe0], xmm0",
+            " mov rax, qword ptr [r13 + 0x10]",
+            "-mov qword ptr [rsp + 0xe8], rax",
+            "+mov qword ptr [rsp + 0x108], rax",
+            " movups xmm0, xmmword ptr [r13]",
+            "-movups xmmword ptr [rsp + 0xd8], xmm0",
+            "+movups xmmword ptr [rsp + 0xf8], xmm0",
+            " xorps xmm0, xmm0",
+            " movups xmmword ptr [r13], xmm0",
+            "@@ -50,5 +50,5 @@\n",
+            " test rax, rax",
+            " je <target>",
+            "-mov rax, qword ptr [rsp + 0x70]",
+            "+mov rax, qword ptr [rsp + 0x90]",
+            " mov qword ptr [r14], rax",
+            " mov rdi, r14",
+            "@@ -56,5 +56,5 @@\n",
+            " mov rsi, r12",
+            " call <target>",
+            "-lea rax, [rsp + 0xc0]",
+            "+lea rax, [rsp + 0xe0]",
+            " mov rcx, qword ptr [rax + 0x10]",
+            " mov qword ptr [r14 + 0x60], rcx",
+            "@@ -68,47 +68,50 @@\n",
+            " movups xmmword ptr [rax + 0x18], xmm0",
+            " mov qword ptr [rax + 0x28], 0",
+            "-mov qword ptr [rsp + 0x50], r14",
+            "-mov qword ptr [rsp + 0x20], r14",
+            "+mov qword ptr [rsp + 0x70], r14",
+            "+mov qword ptr [rsp + 0x30], r14",
+            " lea rax, [rip <target>]",
+            "-mov qword ptr [rsp + 0x30], rax",
+            "+mov qword ptr [rsp + 0x40], rax",
+            " lea rax, [rip <target>]",
+            "-mov qword ptr [rsp + 0x38], rax",
+            "+mov qword ptr [rsp + 0x48], rax",
+            " lea rax, [rip <target>]",
+            "-mov qword ptr [rsp + 0x60], rax",
+            "-mov qword ptr [rsp + 0x68], 0",
+            "+mov qword ptr [rsp + 0x80], rax",
+            "+mov qword ptr [rsp + 0x88], 0",
+            " mov rax, qword ptr [r15]",
+            "-lea rsi, [rsp + 0x20]",
+            "+lea rsi, [rsp + 0x30]",
+            " lea rdx, [rsp + 0x1b]",
+            " lea rcx, [rsp + 0x1a]",
+            " mov rdi, r15",
+            " call qword ptr [rax + 8]",
+            "-lea rdx, [rsp + 0x20]",
+            "+lea rdx, [rsp + 0x30]",
+            " mov edi, 1",
+            " mov rsi, rdx",
+            "-call qword ptr [rsp + 0x30]",
+            "-lea rdx, [rsp + 0x50]",
+            "+call qword ptr [rsp + 0x40]",
+            "+lea rdx, [rsp + 0x70]",
+            " mov edi, 1",
+            " mov rsi, rdx",
+            "-call qword ptr [rsp + 0x60]",
+            "-test byte ptr [rsp + 0xd8], 1",
+            "-je <target>",
+            "-mov rsi, qword ptr [rsp + 0xd8]",
+            "-mov rdi, qword ptr [rsp + 0xe8]",
+            "+call qword ptr [rsp + 0x80]",
+            "+test byte ptr [rsp + 0xf8], 1",
+            "+je <target>",
+            "+mov rsi, qword ptr [rsp + 0xf8]",
+            "+mov rdi, qword ptr [rsp + 0x108]",
+            " and rsi, 0xfffffffffffffffe",
+            " call <target>",
+            "-test byte ptr [rsp + 0x78], 1",
+            "-je <target>",
+            "-mov rsi, qword ptr [rsp + 0x78]",
+            "-mov rdi, qword ptr [rsp + 0x88]",
+            "-jmp <target>",
+            "-mov r13d, eax",
+            "-shr r13d, 1",
+            "-mov r12, qword ptr [rbp]",
+            "-mov ecx, dword ptr [rbp + 0x10]",
+            "+test byte ptr [rsp + 0x98], 1",
+            "+je <target>",
+            "+mov rsi, qword ptr [rsp + 0x98]",
+            "+mov rdi, qword ptr [rsp + 0xa8]",
+            "+jmp <target>",
+            "+mov edi, eax",
+            "+shr edi, 1",
+            "+mov rcx, qword ptr [rbx]",
+            "+mov qword ptr [rsp + 0x58], rcx",
+            "+mov ecx, dword ptr [rbx + 0x10]",
+            " mov dword ptr [rsp + 0x1c], ecx",
+            "-lea rdx, [r13 + 0x18]",
+            "+lea rdx, [rdi + 0x18]",
+            " mov ecx, edx",
+            " mov rsi, rcx",
+            "-sub rsi, r13",
+            "+sub rsi, rdi",
+            "+mov qword ptr [rsp + 0x60], r14",
+            "+mov qword ptr [rsp + 0x20], rdi",
+            " jbe <target>",
+            " mov rdi, rsp",
+            "@@ -125,182 +128,216 @@\n",
+            " mov qword ptr [rsp + 8], rcx",
+            " mov byte ptr [rax + rcx], 0",
+            "-movzx eax, byte ptr [rsp]",
+            "-mov ebp, eax",
+            "-shr ebp, 1",
+            "-test al, 1",
+            "-mov rdi, qword ptr [rsp + 0x10]",
+            "-lea rcx, [rsp + 1]",
+            "-mov r15, rdi",
+            "-cmove r15, rcx"
+          ]
+        }
+      ],
       "manual_abi_review_required": true
     },
     {
@@ -8732,46 +9699,43 @@
       ],
       "candidates": [
         {
-          "address": "0x5ffece0",
-          "similarity": 0.27566,
-          "size": 247,
+          "address": "0xdac2b40",
+          "similarity": 0.22091,
+          "size": 905,
           "evidence": [
-            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE"
+            "qualified_vtable:N9NetherNet12_GLOBAL__N_120TransportFactoryImplE:top=0:slot=5:thunk_resolved",
+            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE",
+            "self_rtti:N9NetherNet12ContextProxyE"
           ],
           "head": [
+            "push rbp",
+            "push r15",
             "push r14",
+            "push r13",
+            "push r12",
             "push rbx",
-            "push rax",
-            "lea rax, [rip <target>]",
-            "mov qword ptr [rdi], rax",
-            "lea rax, [rip <target>]",
-            "mov qword ptr [rdi + 0x18], rax",
-            "xorps xmm0, xmm0",
-            "mov rbx, qword ptr [rdi + 0x28]",
-            "movups xmmword ptr [rdi + 0x20], xmm0",
-            "test rbx, rbx",
-            "je <target>",
-            "mov rax, 0xffffffffffffffff",
-            "lock xadd qword ptr [rbx + 8], rax",
-            "test rax, rax",
-            "jne <target>"
+            "sub rsp, 0x58",
+            "mov qword ptr [rsp + 0x50], rcx",
+            "mov qword ptr [rsp + 0x48], rdx",
+            "mov r14, rsi",
+            "mov r15, rdi",
+            "add rdi, 8",
+            "mov qword ptr [rsp + 0x40], rdi",
+            "call <target>",
+            "mov r12, qword ptr [r15 + 0x38]",
+            "test r12, r12"
           ],
           "instruction_diff": [
             "--- 1.26.52\n",
             "+++ 1.26.60\n",
-            "@@ -1,109 +1,12 @@\n",
-            "-push rbp",
-            "-push r15",
-            " push r14",
-            "-push r13",
-            "-push r12",
-            " push rbx",
-            "-sub rsp, 0x58",
-            "-mov qword ptr [rsp + 0x50], rcx",
-            "-mov qword ptr [rsp + 0x48], rdx",
+            "@@ -8,230 +8,196 @@\n",
+            " mov qword ptr [rsp + 0x50], rcx",
+            " mov qword ptr [rsp + 0x48], rdx",
             "-mov r15, rsi",
             "-mov rbx, rdi",
-            "-add rdi, 8",
+            "+mov r14, rsi",
+            "+mov r15, rdi",
+            " add rdi, 8",
             "-mov qword ptr [rsp + 0x38], rdi",
             "-call <target>",
             "-mov qword ptr [rsp + 0x40], rbx",
@@ -8791,8 +9755,15 @@
             "-jne <target>",
             "-jmp <target>",
             "-nop dword ptr [rax]",
-            "-cmp ecx, -1",
-            "-je <target>",
+            "+mov qword ptr [rsp + 0x40], rdi",
+            "+call <target>",
+            "+mov r12, qword ptr [r15 + 0x38]",
+            "+test r12, r12",
+            "+je <target>",
+            "+lea r13, [r15 + 0x38]",
+            "+mov ecx, dword ptr [r14 + 0x10]",
+            " cmp ecx, -1",
+            " je <target>",
             "-add rbx, 8",
             "-mov rbx, qword ptr [rbx]",
             "-test rbx, rbx",
@@ -8801,8 +9772,19 @@
             "-mov ecx, dword ptr [r15 + 0x10]",
             "-cmp eax, -1",
             "-je <target>",
-            "-cmp ecx, -1",
-            "-je <target>",
+            "+lea rbx, [rip <target>]",
+            "+lea rbp, [rsp + 0x10]",
+            "+jmp <target>",
+            "+nop dword ptr [rax + rax]",
+            "+mov rax, qword ptr [r12]",
+            "+test rax, rax",
+            "+je <target>",
+            "+mov ecx, dword ptr [r14 + 0x10]",
+            "+mov r13, r12",
+            "+mov r12, rax",
+            "+mov edx, dword ptr [r12 + 0x30]",
+            " cmp ecx, -1",
+            " je <target>",
             "-cmp eax, ecx",
             "-jne <target>",
             "-lea rsi, [rbx + 0x20]",
@@ -8834,79 +9816,92 @@
             "-mov rsi, r15",
             "-lea rcx, [rip <target>]",
             "-call qword ptr [rcx + rax*8]",
-            "-test al, al",
-            "-js <target>",
+            "+cmp edx, -1",
+            "+je <target>",
+            "+mov r8d, ecx",
+            "+cmp r8, rdx",
+            "+seta al",
+            "+sbb al, 0",
+            "+cmp ecx, edx",
+            "+jne <target>",
+            "+lea rdx, [r12 + 0x20]",
+            "+lea rax, [rsp + 0xf]",
+            "+mov qword ptr [rsp + 0x10], rax",
+            "+mov rdi, rbp",
+            "+mov rsi, r14",
+            "+call qword ptr [rbx + r8*8]",
+            "+jmp <target>",
+            "+cmp edx, -1",
+            "+setne al",
+            "+neg al",
+            " test al, al",
+            " js <target>",
             "-mov rax, qword ptr [r14 + 0x38]",
-            "-lock inc dword ptr [rax + 0x48]",
+            "+je <target>",
+            "+mov rax, qword ptr [r12 + 8]",
+            "+test rax, rax",
+            "+je <target>",
+            "+add r12, 8",
+            "+jmp <target>",
+            "+nop ",
+            "+mov r12, qword ptr [r12]",
+            "+test r12, r12",
+            "+je <target>",
+            "+cmp dword ptr [r12 + 0x30], -1",
+            "+jne <target>",
+            "+test r12, r12",
+            "+jne <target>",
+            "+jmp <target>",
+            "+mov r12, qword ptr [r13]",
+            "+test r12, r12",
+            "+je <target>",
+            "+lea rax, [r15 + 0x38]",
+            "+cmp r12, rax",
+            "+je <target>",
+            "+mov rax, qword ptr [r12 + 0x38]",
+            " lock inc dword ptr [rax + 0x48]",
             "-mov rax, qword ptr [r14 + 0x38]",
             "-jmp <target>",
             "-cmp ecx, -1",
             "-je <target>",
             "-mov r14, qword ptr [rsp + 0x40]",
             "-mov rbx, qword ptr [r14 + 0x48]",
-            "-test rbx, rbx",
-            "-je <target>",
-            "-lea rdi, [rip <target>]",
-            "-mov rax, qword ptr [rip <target>]",
+            "+mov rax, qword ptr [r12 + 0x38]",
+            "+jmp <target>",
+            "+mov rbx, qword ptr [r15 + 0x48]",
+            " test rbx, rbx",
+            " je <target>",
+            " lea rdi, [rip <target>]",
+            " mov rax, qword ptr [rip <target>]",
             "-mov esi, 0x288",
-            "-call qword ptr [rax + <target>]",
-            "-mov r13, rax",
-            "-test rax, rax",
-            "-je <target>",
-            "-lea r12, [rsp + 8]",
-            "-mov rdi, r12",
-            "-mov rsi, rbx",
-            "-call <target>",
-            "-mov rdi, r13",
-            "-mov rsi, r12",
-            "-mov rdx, r15",
-            "-mov rcx, qword ptr [rsp + 0x48]",
-            "-call <target>",
-            "+push rax",
-            " lea rax, [rip <target>]",
-            "-mov qword ptr [rsp + 8], rax",
-            "+mov qword ptr [rdi], rax",
-            "+lea rax, [rip <target>]",
-            "+mov qword ptr [rdi + 0x18], rax",
-            " xorps xmm0, xmm0",
-            "-mov rbx, qword ptr [rsp + 0x28]",
-            "-movups xmmword ptr [rsp + 0x20], xmm0",
-            "+mov rbx, qword ptr [rdi + 0x28]",
-            "+movups xmmword ptr [rdi + 0x20], xmm0",
-            " test rbx, rbx",
-            " je <target>",
-            "@@ -113,10 +16,12 @@\n",
-            " jne <target>",
-            " mov rax, qword ptr [rbx]",
-            "+mov r14, rdi",
-            " mov rdi, rbx",
-            " call qword ptr [rax + <target>]",
-            " mov rdi, rbx",
-            " call <target>",
-            "-mov rbx, qword ptr [rsp + 0x28]",
-            "-mov qword ptr [rsp + 0x30], 0",
-            "+mov rdi, r14",
-            "+mov rbx, qword ptr [rdi + 0x28]",
-            "+mov qword ptr [rdi + 0x30], 0",
-            " test rbx, rbx",
-            " je <target>",
-            "@@ -126,19 +31,19 @@\n",
-            " jne <target>",
-            " mov rax, qword ptr [rbx]",
-            "+mov r14, rdi",
-            " mov rdi, rbx",
-            " call qword ptr [rax + <target>]",
-            " mov rdi, rbx",
-            " call <target>",
-            "+mov rdi, r14",
-            " jmp <target>",
-            "-xor ebx, ebx",
-            "-jmp <target>",
-            "-mov qword ptr [rsp + 0x30], 0",
-            "+mov qword ptr [rdi + 0x30], 0",
-            " lea rax, [rip <target>]",
-            "-mov qword ptr [rsp + 8], rax",
-            "-mov rbx, qword ptr [rsp + 0x18]"
+            "-call qword ptr [rax + 0x10]",
+            "-mov r13, rax"
+          ]
+        },
+        {
+          "address": "0x5ffece0",
+          "similarity": 0.27566,
+          "size": 247,
+          "evidence": [
+            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE"
+          ],
+          "head": [
+            "push r14",
+            "push rbx",
+            "push rax",
+            "lea rax, [rip <target>]",
+            "mov qword ptr [rdi], rax",
+            "lea rax, [rip <target>]",
+            "mov qword ptr [rdi + 0x18], rax",
+            "xorps xmm0, xmm0",
+            "mov rbx, qword ptr [rdi + 0x28]",
+            "movups xmmword ptr [rdi + 0x20], xmm0",
+            "test rbx, rbx",
+            "je <target>",
+            "mov rax, 0xffffffffffffffff",
+            "lock xadd qword ptr [rbx + 8], rax",
+            "test rax, rax",
+            "jne <target>"
           ]
         },
         {
@@ -8914,8 +9909,8 @@
           "similarity": 0.27139,
           "size": 236,
           "evidence": [
-            "self_rtti:N9NetherNet12ContextProxyE",
-            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE"
+            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE",
+            "self_rtti:N9NetherNet12ContextProxyE"
           ],
           "head": [
             "push r14",
@@ -8941,8 +9936,8 @@
           "similarity": 0.25,
           "size": 831,
           "evidence": [
-            "self_rtti:N9NetherNet12ContextProxyE",
-            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE"
+            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE",
+            "self_rtti:N9NetherNet12ContextProxyE"
           ],
           "head": [
             "push rbp",
@@ -8988,33 +9983,6 @@
             "lock inc qword ptr [rdi + 8]",
             "mov rdx, qword ptr [rdx + 0x10]"
           ]
-        },
-        {
-          "address": "0xda80870",
-          "similarity": 0.23385,
-          "size": 1566,
-          "evidence": [
-            "self_rtti:N9NetherNet12ContextProxyE",
-            "self_rtti:N7Bedrock24EnableNonOwnerReferencesE"
-          ],
-          "head": [
-            "push rbp",
-            "push r15",
-            "push r14",
-            "push r13",
-            "push r12",
-            "push rbx",
-            "sub rsp, 0x98",
-            "mov rbx, rdi",
-            "mov qword ptr [rdi + 0x50], rsi",
-            "mov rax, qword ptr [rip <target>]",
-            "lea rdi, [rip <target>]",
-            "mov esi, 0x20",
-            "call qword ptr [rax + <target>]",
-            "test rax, rax",
-            "je <target>",
-            "xorps xmm0, xmm0"
-          ]
         }
       ],
       "manual_abi_review_required": true
@@ -9053,8 +10021,8 @@
           "size": 1342,
           "evidence": [
             "self_string:: Sending STUN ",
-            "self_string:: reason=",
-            "self_string:/mnt/vss/_work/1/s/vcpkg/git/vcpkg/buildtrees/webrtc/src/webrtc-build/webrtc/p2p/base/port.cc"
+            "self_string:/mnt/vss/_work/1/s/vcpkg/git/vcpkg/buildtrees/webrtc/src/webrtc-build/webrtc/p2p/base/port.cc",
+            "self_string:: reason="
           ],
           "head": [
             "push rbp",
@@ -9205,7 +10173,7 @@
             "-mov rcx, r14",
             "+mov rcx, r13",
             " xor r9d, r9d",
-            " call qword ptr [rax + <target>]",
+            " call qword ptr [rax + 0x90]",
             "@@ -152,5 +150,5 @@\n",
             " lea rbx, [rsp + 0x58]",
             " mov rdi, rbx",
@@ -9260,7 +10228,7 @@
             "lea r12, [rdi + 0x288]",
             "mov rax, qword ptr [rsi]",
             "mov rdi, rsi",
-            "call qword ptr [rax + <target>]",
+            "call qword ptr [rax + 0x18]",
             "lea rsi, [rax + 0x50]",
             "lea r15, [rsp + 0x20]",
             "mov rdi, r15",
