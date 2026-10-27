@@ -182,6 +182,7 @@ jobs:
 
   docker:
     name: Docker (${{ matrix.name }})
+    if: github.repository == 'EndstoneMC/endstone'
     runs-on: ubuntu-latest
     needs: [ wheels ]
     permissions:

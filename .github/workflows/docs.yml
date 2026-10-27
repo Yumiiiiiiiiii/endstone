@@ -19,6 +19,7 @@ permissions:
 
 jobs:
   deploy:
+    if: github.repository == 'EndstoneMC/endstone'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "repository": "Yumiiiiiiiiii/endstone",
+  "egg_repository": "Yumiiiiiiiiii/pterodactyl",
+  "upstream": "EndstoneMC/endstone",
+  "base_version": "0.11.14",
+  "native_bds": "1.26.52",
+  "requested_bds": "1.26.60",
+  "python": "3.13",
+  "stable_required_checks": [
+    "native_abi", "boot", "commands", "scheduler", "world_save_restart",
+    "player_events", "block_entity", "network", "plugins", "docker", "wings"
+  ],
+  "stable_validated": false
+}

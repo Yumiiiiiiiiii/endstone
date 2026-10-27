@@ -1,0 +1,14 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "endstone-fork-probe"
+version = "0.1.0"
+requires-python = ">=3.11"
+
+[project.entry-points.endstone]
+fork_probe = "fork_probe:ForkProbe"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fork_probe"]
