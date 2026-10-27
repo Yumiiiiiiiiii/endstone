@@ -4203,7 +4203,8 @@
           "evidence": [
             "rtti_method_fragment:PFPN15CommandRegistry10ParseTokenERS3_NS2_6SymbolE",
             "rtti_method_fragment:PFPN15CommandRegistry10ParseTokenERS3_NS2_6SymbolE",
-            "rtti_method_fragment:PFPN15CommandRegistry10ParseTokenERS3_NS2_6SymbolE"
+            "rtti_method_fragment:PFPN15CommandRegistry10ParseTokenERS3_NS2_6SymbolE",
+            "callgraph:old_caller=0x9c54be0:new_caller=0xa00f310"
           ],
           "head": [
             "push rbp",
@@ -4455,11 +4456,11 @@
           ]
         },
         {
-          "address": "0xa0e9150",
-          "similarity": 0.10135,
-          "size": 1451,
+          "address": "0xa0dfb80",
+          "similarity": 0.10559,
+          "size": 3971,
           "evidence": [
-            "rtti_method_fragment:PFPN15CommandRegistry10ParseTokenERS3_NS2_6SymbolE"
+            "callgraph:old_caller=0x9c54be0:new_caller=0xa00f310"
           ],
           "head": [
             "push rbp",
@@ -4468,16 +4469,16 @@
             "push r13",
             "push r12",
             "push rbx",
-            "sub rsp, 0xd8",
-            "mov rbp, rdx",
-            "lea rax, [rsp + 0x10]",
-            "xorps xmm0, xmm0",
-            "movups xmmword ptr [rsp + 0x10], xmm0",
-            "mov qword ptr [rsp + 8], rax",
-            "mov dword ptr [rsp + 0x2c], esi",
-            "mov eax, esi",
-            "mov qword ptr [rsp + 0x80], rdi",
-            "mov rcx, qword ptr [rdi + 0xc8]"
+            "sub rsp, 0x1f8",
+            "mov r15d, r9d",
+            "mov r14d, r8d",
+            "mov qword ptr [rsp + 0x100], rdx",
+            "mov byte ptr [rsp + 0x1b], cl",
+            "movzx eax, byte ptr [rsi]",
+            "mov ecx, eax",
+            "lea rdx, [rsi + 1]",
+            "shr eax, 1",
+            "test cl, 1"
           ]
         }
       ],

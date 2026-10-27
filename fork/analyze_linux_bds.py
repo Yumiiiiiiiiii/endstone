@@ -415,12 +415,17 @@ def main():
         for label in old.labels(baseline[0]):
             for address in new.functions_for_label(label):
                 candidates[address].append('self_' + label[0] + ':' + label[1])
-        for caller in sorted(callers[baseline[0]], key=lambda address: old.functions[address])[:15]:
+        for caller in sorted(callers[baseline[0]], key=lambda address: old.functions[address])[:32]:
             mapped_callers = {mappings[caller]} if caller in mappings else set()
             if not mapped_callers:
                 labels = sorted(old.labels(caller), key=lambda label: len(label[1]), reverse=True)[:12]
                 for label in labels:
-                    mapped_callers.update(new.functions_for_label(label))
+                    matches_for_label = new.functions_for_label(label)
+                    # A shared CompoundTag/functor type may occur in hundreds
+                    # of functions. Do not let it drown out a unique command
+                    # description or other specific anchor in the same caller.
+                    if len(matches_for_label) <= 20:
+                        mapped_callers.update(matches_for_label)
                 mapped_callers = {address for address in mapped_callers if address in new.functions and
                                   0.25 < new.functions[address] / old.functions[caller] < 4}
                 if len(mapped_callers) > 100:
