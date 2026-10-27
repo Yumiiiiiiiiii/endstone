@@ -3,6 +3,10 @@
 この Fork は `https://github.com/Yumiiiiiiiiii/endstone` のソースをビルドする。
 公式ソースの直接 clone や、公式 PyPI Wheel へのフォールバックは行わない。
 
+`CommandSenderWrapper`がPythonへ渡る際、`asConsole()`経由で元の送信者へ置き換わる不具合も修正する。
+独自コマンドの応答がcallbackへ届くことを、scratch BDSの実行時probeで必須検証する。
+これはDiscordSRVのコンソール出力捕捉に関係し、BDS 1.26.60へのABI対応とは別の修正である。
+
 ## 現在の互換性
 
 - upstream main / v0.11.14: BDS 1.26.52 / protocol 2193。

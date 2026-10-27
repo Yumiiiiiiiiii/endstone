@@ -59,6 +59,12 @@ struct polymorphic_type_hook<endstone::CommandSender> {
         if (!src) {
             return src;
         }
+        // A wrapper forwards asConsole/asPlayer to its underlying sender. Keep
+        // its own identity when crossing into Python, or callbacks are lost.
+        if (const auto *wrapper = dynamic_cast<const endstone::CommandSenderWrapper *>(src)) {
+            type = &typeid(endstone::CommandSenderWrapper);
+            return wrapper;
+        }
         if (const auto *actor = src->asActor()) {
             return polymorphic_type_hook<endstone::Actor>::get(actor, type);
         }
