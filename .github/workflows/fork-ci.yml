@@ -16,6 +16,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  release-gate-tests:
+    if: github.repository == 'Yumiiiiiiiiii/endstone'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: python -m unittest discover -s fork/tests -v
   wheel:
     if: github.repository == 'Yumiiiiiiiiii/endstone'
     runs-on: ubuntu-24.04
@@ -44,6 +57,10 @@ jobs:
               f.write('SETUPTOOLS_SCM_PRETEND_VERSION=' + version + '\n')
               f.write('FORK_COMMIT=' + sha + '\n')
           PY
+      - uses: actions/cache@v4
+        with:
+          path: .conan2
+          key: fork-conan-linux-cp313-v1-${{ hashFiles('conanfile.py', 'pyproject.toml') }}
       - name: Build Fork source with upstream Conan / CMake / Clang toolchain
         uses: pypa/cibuildwheel@v4.3.0
         env:

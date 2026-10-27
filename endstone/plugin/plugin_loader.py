@@ -43,7 +43,9 @@ def find_python() -> Path:
     seen = set()
     ordered = []
     for path in paths:
-        path = Path(path).resolve()
+        # Resolving a venv's Python symlink selects the base interpreter and loses
+        # its installed dependencies. Keep the caller's interpreter path.
+        path = Path(path).absolute()
         if path not in seen:
             seen.add(path)
             ordered.append(path)
@@ -131,8 +133,11 @@ class PythonPluginLoader(PluginLoader):
                 "--disable-pip-version-check",
             ],
             env=env,
+            check=True,
         )
-
+        # The plugin prefix may not have existed when the loader first scanned
+        # sys.path. Drop cached misses before importing a newly installed wheel.
+        importlib.invalidate_caches()
         eps = distribution(dist_name).entry_points.select(group="endstone")
         for ep in eps:
             plugin = self._load_plugin_from_ep(ep)

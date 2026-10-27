@@ -1,0 +1,83 @@
+name: Fork upstream and BDS monitor
+
+on:
+  workflow_dispatch:
+    inputs:
+      propose_sync:
+        description: Create development sync PR (never merge stable)
+        type: boolean
+        default: false
+  schedule:
+    - cron: '17 3 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  monitor:
+    if: github.repository == 'Yumiiiiiiiiii/endstone'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: python fork/monitor.py --record-issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/upload-artifact@v7
+        with:
+          name: upstream-and-bds-${{ github.run_id }}
+          path: reports/
+  sync-pr:
+    if: github.repository == 'Yumiiiiiiiiii/endstone' && github.event_name == 'workflow_dispatch' && inputs.propose_sync
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository }}
+          ref: dev
+          fetch-depth: 0
+      - name: Merge official changes into a review branch in this Fork
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORK_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git remote add upstream https://github.com/EndstoneMC/endstone.git
+          git remote set-url --push upstream DISABLED
+          git fetch upstream main
+          if git merge-base --is-ancestor upstream/main HEAD; then exit 0; fi
+          sha=$(git rev-parse upstream/main)
+          branch="sync/upstream-${sha:0:12}"
+          if git ls-remote --exit-code --heads origin "$branch"; then exit 0; fi
+          git switch -c "$branch"
+          if ! git merge --no-ff --no-edit upstream/main; then
+            git status --short > /tmp/conflicts.txt
+            git merge --abort
+            title="Upstream sync conflict ${sha:0:12}"
+            if [ "$(gh issue list --repo "$FORK_REPOSITORY" --search "$title in:title" --json number --jq length)" = 0 ]; then
+              gh issue create --repo "$FORK_REPOSITORY" --title "$title" --body-file /tmp/conflicts.txt
+            fi
+            exit 1
+          fi
+          git push origin "HEAD:refs/heads/$branch"
+          printf 'Upstream %s merged into a Fork review branch. Run Fork Linux candidate on this branch before merging into dev. Stable promotion requires separate runtime validation.\n' "$sha" > /tmp/pr-body.md
+          gh pr create --repo "$FORK_REPOSITORY" --base dev --head "$branch" \
+            --title "Review upstream ${sha:0:12}" --body-file /tmp/pr-body.md
+          # GITHUB_TOKEN events do not trigger a second workflow automatically.
+          gh workflow run fork-ci.yml --repo "$FORK_REPOSITORY" --ref "$branch"

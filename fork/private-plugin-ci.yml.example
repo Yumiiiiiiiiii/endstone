@@ -1,0 +1,57 @@
+# Copy ONLY into an already authorized private plugin repository.
+# Do not upload private plugin sources/artifacts to the public Endstone Fork.
+name: Private Endstone plugins
+on:
+  workflow_dispatch:
+    inputs:
+      endstone_release:
+        description: Exact validated Fork Release tag
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  plugins:
+    if: github.event.repository.private
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Download Fork wheel and verify manifest
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE: ${{ inputs.endstone_release }}
+        run: |
+          python - <<'PY'
+          import os,re
+          assert re.fullmatch(r'[A-Za-z0-9_.+-]+', os.environ['RELEASE'])
+          PY
+          gh release download "$RELEASE" --repo Yumiiiiiiiiii/endstone --pattern manifest.json --dir fork-release
+          gh release download "$RELEASE" --repo Yumiiiiiiiiii/endstone --pattern '*cp313*manylinux*x86_64.whl' --dir fork-release
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          m=json.loads(Path('fork-release/manifest.json').read_text())
+          assert m['repository']=='Yumiiiiiiiiii/endstone'
+          assert m['channel']=='stable'
+          wheel=Path('fork-release')/m['wheel']['filename']
+          assert wheel.is_file() and hashlib.sha256(wheel.read_bytes()).hexdigest()==m['wheel']['sha256']
+          Path('constraints.txt').write_text('endstone=='+m['endstone_version']+'\n')
+          PY
+          python -m pip install build pytest pytest-asyncio ruff fork-release/*.whl
+      - name: Test and package configured private projects
+        env:
+          PIP_CONSTRAINT: ${{ github.workspace }}/constraints.txt
+        run: |
+          python tools/build_plugins.py --config plugins.local.json --output dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: private-plugins-${{ github.sha }}
+          path: dist/
+          retention-days: 7

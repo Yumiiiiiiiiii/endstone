@@ -1,0 +1,107 @@
+name: Fork validated release promotion
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_run:
+        description: Successful Fork Linux candidate run ID, including full runtime-evidence artifact
+        type: string
+        required: true
+      source_sha:
+        description: Full Fork commit validated by that run
+        type: string
+        required: true
+      release_tag:
+        description: Immutable ymii- release tag
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    if: github.repository == 'Yumiiiiiiiiii/endstone'
+    runs-on: ubuntu-24.04
+    environment: stable-promotion
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify candidate source and run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CANDIDATE_RUN: ${{ inputs.candidate_run }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          python - <<'PY'
+          import json,os,re,subprocess
+          assert re.fullmatch(r'[0-9]+',os.environ['CANDIDATE_RUN'])
+          assert re.fullmatch(r'[0-9a-f]{40}',os.environ['SOURCE_SHA'])
+          assert re.fullmatch(r'ymii-[A-Za-z0-9_.+-]+',os.environ['RELEASE_TAG'])
+          run=json.loads(subprocess.check_output(['gh','api','repos/Yumiiiiiiiiii/endstone/actions/runs/'+os.environ['CANDIDATE_RUN']]))
+          assert run['conclusion']=='success' and run['status']=='completed'
+          assert run['head_sha']==os.environ['SOURCE_SHA']
+          assert run['head_repository']['full_name']=='Yumiiiiiiiiii/endstone'
+          assert run['path']=='.github/workflows/fork-ci.yml'
+          PY
+          gh run download "$CANDIDATE_RUN" --repo Yumiiiiiiiiii/endstone --name "fork-linux-$SOURCE_SHA" --dir candidate
+          gh run download "$CANDIDATE_RUN" --repo Yumiiiiiiiiii/endstone --name "full-runtime-evidence-$SOURCE_SHA" --dir evidence
+      - name: Build manifest (missing checks or evidence stop here)
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          wheel=$(find candidate -name '*cp313*manylinux*x86_64.whl' -print -quit)
+          test -n "$wheel"
+          python fork/release_manifest.py --wheel "$wheel" --evidence evidence/validation.json \
+            --bds-metadata evidence/bds-metadata.json --commit "$SOURCE_SHA" --tag "$RELEASE_TAG" --output release/manifest.json
+          cp "$wheel" release/
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('release/manifest.json').read_text())
+          Path('release/verification.json').write_text(json.dumps(m['validation'],indent=2)+'\n')
+          PY
+      - name: Publish immutable Fork Release (never official PyPI)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          if gh release view "$RELEASE_TAG" --repo Yumiiiiiiiiii/endstone; then
+            echo 'Release already exists; immutable release assets cannot be overwritten'
+            exit 1
+          fi
+          printf 'Validated Fork build from %s. Evidence is attached. BDS is downloaded from Mojang and is not redistributed.\n' "$SOURCE_SHA" > /tmp/release-notes.md
+          gh release create "$RELEASE_TAG" --repo Yumiiiiiiiiii/endstone --target "$SOURCE_SHA" \
+            --title "$RELEASE_TAG" --notes-file /tmp/release-notes.md release/*
+      - name: Advance stable only after the complete evidence gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          if gh api repos/Yumiiiiiiiiii/endstone/git/ref/heads/stable >/dev/null 2>&1; then
+            gh api --method PATCH repos/Yumiiiiiiiiii/endstone/git/refs/heads/stable -f sha="$SOURCE_SHA" -F force=false
+          else
+            gh api --method POST repos/Yumiiiiiiiiii/endstone/git/refs -f ref=refs/heads/stable -f sha="$SOURCE_SHA"
+          fi
+          printf 'Stable alias for validated immutable release %s (%s).\n' "$RELEASE_TAG" "$SOURCE_SHA" > /tmp/stable-notes.md
+          if gh release view stable --repo Yumiiiiiiiiii/endstone >/dev/null 2>&1; then
+            gh api --method PATCH repos/Yumiiiiiiiiii/endstone/git/refs/tags/stable -f sha="$SOURCE_SHA" -F force=true
+            gh release edit stable --repo Yumiiiiiiiiii/endstone --notes-file /tmp/stable-notes.md
+          else
+            gh release create stable --repo Yumiiiiiiiiii/endstone --target "$SOURCE_SHA" --title 'Validated stable' --notes-file /tmp/stable-notes.md
+          fi
+          # Only the alias manifest changes; immutable release assets above never do.
+          gh release upload stable --repo Yumiiiiiiiiii/endstone --clobber release/manifest.json
