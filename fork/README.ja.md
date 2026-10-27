@@ -15,6 +15,18 @@
 - バージョン定数、構造体、ABI、生成済みヘッダーは未検証の値に書き換えない。
 - `probe_bds.py` は解析用で、ネイティブヘッダーを生成しない。全シグネチャが一致しても ABI・実機検証合格にはならない。
 
+追加のELF解析は、同じForkの`fork/analyze_linux_bds.py`で行う。`fork/requirements-analysis.txt`を
+開発用venvへ導入し、`--baseline <1.26.52 zip> --target <1.26.60 zip> --output <report.json>`を指定する。
+unwindの関数境界、RTTI vtable、文字列xref、callgraph、逆アセンブルを比較して候補と根拠を記録する。
+類似度は関数同定・引数型・内部構造体の正しさを保証しない。候補からhookやsymbol headerは書き換えない。
+現時点で、LevelのGameplayUserManager参照が`this+0x418`から`this+0x420`へ変化した候補を確認した。
+このため、旧構造のままバージョンだけを変更して起動・配布することはできない。
+
+RTTIから得たprimary vtableの長さにも差がある。Playerは246→247、ServerPlayerは248→249、
+Dimensionは50→51、ServerNetworkHandlerは107→111、Itemは132→133、BlockTypeは133→134。
+挿入位置や各slotの意味、フィールドの配置は引き続き確認が必要。長さだけでnative headerを変更しない。
+Actionsは署名診断が失敗した場合も比較解析を保存するが、失敗を成功へ変換しない。
+
 ## ブランチ
 
 `main` は公式 main の追跡用、`dev` は公式更新と独自変更の統合先、

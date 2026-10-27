@@ -25,6 +25,8 @@ class ReleaseGateTests(unittest.TestCase):
         self.proof = self.root / "proof.txt"
         self.proof.write_text("SYNTHETIC TEST FIXTURE ONLY")
         self.data = {"commit": self.commit, "wheel_sha256": release.sha256(self.wheel),
+                     "runtime_commit": "d" * 40, "docker_image_digest": "sha256:" + "e" * 64,
+                     "installer_image_digest": "sha256:" + "f" * 64,
                      "bds_version": self.bds["version"], "bds_sha256": self.bds["sha256"],
                      "checks": dict.fromkeys(release.CHECKS, "passed"),
                      "evidence_files": {name: {"path": self.proof.name, "sha256": release.sha256(self.proof)} for name in release.CHECKS}}
@@ -44,6 +46,13 @@ class ReleaseGateTests(unittest.TestCase):
         self.data["checks"].pop("wings")
         with self.assertRaisesRegex(ValueError, "all native"):
             self.assemble()
+
+    def test_installer_and_runtime_digest_required(self):
+        for field in ("runtime_commit", "docker_image_digest", "installer_image_digest"):
+            original = self.data.pop(field)
+            with self.assertRaises(ValueError):
+                self.assemble()
+            self.data[field] = original
 
     def test_wrong_wheel_commit_bds_or_missing_log_rejected(self):
         for key, value in [("commit", "c" * 40), ("wheel_sha256", "c" * 64),

@@ -29,6 +29,11 @@ def assemble(wheel: Path, evidence_path: Path, tag: str, commit: str, bds: dict)
         raise ValueError("Runtime evidence must identify the actual BDS artifact")
     if any(evidence.get("checks", {}).get(name) != "passed" for name in CHECKS):
         raise ValueError("Stable requires all native/player/plugin/Docker/Wings runtime tests")
+    if not re.fullmatch(r"[0-9a-f]{40}", evidence.get("runtime_commit", "")):
+        raise ValueError("Runtime evidence must identify the exact Pterodactyl Fork commit")
+    for field in ("docker_image_digest", "installer_image_digest"):
+        if not re.fullmatch(r"sha256:[0-9a-f]{64}", evidence.get(field, "")):
+            raise ValueError(f"Runtime evidence requires a tested {field}")
     for check in CHECKS:
         record = evidence.get("evidence_files", {}).get(check, {})
         path = (evidence_path.parent / record.get("path", "")).resolve()
@@ -48,6 +53,9 @@ def assemble(wheel: Path, evidence_path: Path, tag: str, commit: str, bds: dict)
             "wheel": {"filename": wheel.name, "sha256": wheel_sha,
                       "url": f"https://github.com/{repo}/releases/download/{tag}/{wheel.name}"},
             "bds": bds, "plugins": evidence.get("plugins", []),
+            "runtime": {"repository": "Yumiiiiiiiiii/pterodactyl", "commit": evidence["runtime_commit"],
+                        "image_digest": evidence["docker_image_digest"],
+                        "installer_digest": evidence["installer_image_digest"]},
             "validation": {"commit": commit, "checks": evidence["checks"], "report_sha256": sha256(evidence_path)}}
 
 

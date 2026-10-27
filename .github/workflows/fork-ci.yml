@@ -94,9 +94,27 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - run: python -m pip install lief requests tomlkit click colorlog tqdm
+      - run: python -m pip install lief requests tomlkit click colorlog tqdm -r fork/requirements-analysis.txt
       - name: Probe new native signatures (failure keeps candidate red)
         run: python fork/probe_bds.py --version 1.26.60 --platform linux --output reports/bds-1.26.60.json
+      - name: Compare ELF evidence without changing native headers
+        if: ${{ !cancelled() }}
+        run: |
+          python - <<'PY'
+          import json,subprocess,sys
+          from pathlib import Path
+          config=json.loads(Path('fork/config.json').read_text())
+          subprocess.run([sys.executable,'fork/probe_bds.py','--version',config['native_bds'],
+                          '--platform','linux','--output','reports/baseline-linux.json'],check=True)
+          old=json.loads(Path('reports/baseline-linux.json').read_text())
+          new=json.loads(Path('reports/bds-1.26.60.json').read_text())
+          cache=Path('.cache/fork-bds/linux')
+          subprocess.run([sys.executable,'fork/analyze_linux_bds.py',
+                          '--baseline',str(cache/old['archive_filename']),
+                          '--target',str(cache/new['archive_filename']),
+                          '--target-version',config['requested_bds'],
+                          '--output','reports/native-candidates-linux.json'],check=True)
+          PY
       - uses: actions/upload-artifact@v7
         if: always()
         with:

@@ -63,6 +63,7 @@ def probe(version: str, platform: str, output: Path) -> dict:
     unresolved = sorted(name for name, address in resolved.items() if not address)
     report = {
         "schema": 1,
+        "archive_filename": Path(archive).name,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "target_bds": version,
         "baseline_bds": baseline,
